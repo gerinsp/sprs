@@ -11,7 +11,6 @@ class Auth extends CI_Controller
    }
    public function index()
    {
-
       $this->form_validation->set_rules(
          'username',
          'Username',
@@ -58,7 +57,7 @@ class Auth extends CI_Controller
                $data = [
                   'id_user' => $user->id_user,
                   'username' => $user->username,
-                  'role_id' => $user->role_id,
+                  'role_id' => $user->id_role,
                   'nama' => $user->nama
                ];
 
@@ -76,8 +75,16 @@ class Auth extends CI_Controller
                   setcookie('password', $password, (time() - (24 * 60 * 60)));
                }
                $this->session->set_userdata($data);
-               // $this->session->set_flashdata('success', 'Anda berhasil login');
-               redirect('dashboard');
+               $this->session->set_flashdata('success', 'Anda berhasil login');
+               if ($data['role_id'] == 1) {
+                  redirect('admin');
+               } else if ($data['role_id'] == 2) {
+                  redirect('kepsek');
+               } else if ($data['role_id'] == 3) {
+                  redirect('pegawai');
+               } else if ($data['role_id'] == 4) {
+                  redirect('user');
+               }
             } else {
                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password anda salah <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></button></div> ');
                redirect('login');
