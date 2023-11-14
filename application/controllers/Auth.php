@@ -76,7 +76,7 @@ class Auth extends CI_Controller
                   setcookie('password', $password, (time() - (24 * 60 * 60)));
                }
                $this->session->set_userdata($data);
-               $this->session->set_flashdata('success', 'Anda berhasil login');
+               // $this->session->set_flashdata('success', 'Anda berhasil login');
                redirect($menu);
             } else {
                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password anda salah <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></button></div> ');

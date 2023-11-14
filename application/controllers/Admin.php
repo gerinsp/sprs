@@ -8,22 +8,14 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->model('Models', 'm');
         cekuser();
+        // dd($this->session->userdata('nama'));
     }
 
     public function index()
     {
-        $table = 'user';
-        $where = array(
-            'id_user'      =>   $this->session->userdata('id_user')
-        );
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
-        $data['user'] = $this->m->Get_Where($where, $table);
-
-        // $select = $this->db->select('*, count(kode_barang) as jumlahbarang');
-        // $data['read']=$this->m->Get_All('barang',$select);
         $data['title'] = 'SPRS | Dashboard';
-        // echo "Selamat Datang" . $data->nama;
-
 
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
@@ -31,5 +23,34 @@ class Admin extends CI_Controller
         $this->load->view('templates/dashboard', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
+    }
+    public function barang()
+    {
+        $data['title'] = 'SPRS | Barang';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['barang'] = $this->db->get('barang')->result();
+
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/barang', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function barang_save()
+    {
+        $data_barang = [
+            'nama' => $this->input->post('nama'),
+            'kode' => $this->input->post('kode'),
+            'stok' => $this->input->post('stok'),
+            'lokasi' => $this->input->post('lokasi'),
+            'kondisi' => $this->input->post('kondisi')
+        ];
+        $this->db->insert('barang', $data_barang);
+
+        $this->session->set_flashdata('success', 'Berhasil menambahkan barang');
+        return redirect('admin/barang');
     }
 }
