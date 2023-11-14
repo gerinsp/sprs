@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Kendaraan</h1>
+                    <h1>Ruangan</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a class="text-info" href="<?= base_url($this->session->userdata('menu')) ?>">Home</a></li>
-                        <li class="breadcrumb-item active">Kendaraan</li>
+                        <li class="breadcrumb-item active">Ruangan</li>
                     </ol>
                 </div>
             </div>
@@ -26,10 +26,10 @@
                     <?= $this->session->flashdata('message'); ?>
                     <div class="shadow card">
                         <div class="card-body">
-                            <form action="<?php echo base_url($this->session->userdata('menu')) . '/kendaraan-save'; ?> " method="post" accept-charset="utf-8" aria-hidden="true">
+                            <form action="<?php echo base_url($this->session->userdata('menu')) . '/ruangan-save'; ?>" enctype="multipart/form-data" method="post" accept-charset="utf-8" aria-hidden="true">
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-2">
-                                        <label for="nama">Nama Kendaraan</label>
+                                        <label for="nama">Nama Ruangan</label>
                                     </div>
                                     <div class="col-md-5">
                                         <input class="form-control" required name="nama" id="nama" type="text">
@@ -37,18 +37,18 @@
                                 </div>
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-2">
-                                        <label for="stok">Stok Kendaraan</label>
+                                        <label for="lokasi">Lokasi Ruangan</label>
                                     </div>
                                     <div class="col-md-5">
-                                        <input class="form-control" required name="stok" id="stok" type="number">
+                                        <input class="form-control" required name="lokasi" id="lokasi" type="text">
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-2">
-                                        <label for="lokasi">Lokasi Kendaraan</label>
+                                        <label for="foto_ruangan">Foto Ruangan</label>
                                     </div>
                                     <div class="col-md-5">
-                                        <input class="form-control" required name="lokasi" id="lokasi" type="text">
+                                        <input class="form-control" required name="foto_ruangan" id="foto_ruangan" type="file">
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:10px">
@@ -68,21 +68,23 @@
                                     <thead>
                                         <tr height="20px">
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;"><?php echo $this->lang->line('number'); ?></th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Kendaraan</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Stok</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Lokasi</th>
+                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Ruangan</th>
+                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Lokasi Ruangan</th>
+                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Foto Ruangan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $no = 1;
-                                        foreach ($kendaraan as $data) {
+                                        foreach ($ruangan as $data) {
                                         ?>
                                             <tr>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="3%"><?php echo $no ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->stok ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->lokasi ?></td>
+                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
+                                                    <img src="<?php echo $data->foto_ruangan ?>" alt="<?php echo $data->nama ?>" width="60%">
+                                                </td>
                                             </tr>
                                         <?php
                                             $no++;

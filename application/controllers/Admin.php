@@ -79,4 +79,44 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('success', 'Kendaraan berhasil ditambahkan');
         return redirect('admin/kendaraan');
     }
+    public function ruangan()
+    {
+        $data['title'] = 'SPRS | Ruangan';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['ruangan'] = $this->db->get('ruangan')->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/ruangan', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function ruangan_save()
+    {
+        if (!empty($_FILES['foto_ruangan']['name'])) {
+            $files = $_FILES['foto_ruangan'];
+
+            // foreach ($files['tmp_name'] as $key => $tmp_name) {
+            // }
+            $fileContent = file_get_contents($files['tmp_name']);
+            $base64File = base64_encode($fileContent);
+
+            $image = 'data:image/png;base64,' . $base64File;
+            $data_ruangan = [
+                'nama' => $this->input->post('nama'),
+                'lokasi' => $this->input->post('lokasi'),
+                'foto_ruangan' => $image
+            ];
+            $this->db->insert('ruangan', $data_ruangan);
+
+            unset($data['base64_files']);
+            $this->session->set_flashdata('success', 'Ruangan berhasil ditambahkan');
+            return redirect('admin/ruangan');
+        } else {
+            $this->session->set_flashdata('error', 'Ruangan gagal ditambahkan karena foto');
+            redirect('admin/ruangan');
+        }
+    }
 }
