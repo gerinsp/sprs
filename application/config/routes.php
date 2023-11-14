@@ -61,11 +61,11 @@ $route['admin']                                 = 'admin/index';
 // Barang
 $route['admin/barang']                          = 'admin/barang';
 $route['admin/barang/add']                      = 'admin/barang_add'; // Kalau tidak pakai modal, nambah route ini
-$route['admin/barang-save']                     = 'admin/barang_save';
+$route['admin/barang-save']['post']             = 'admin/barang_save';
 // Kendaraan
 $route['admin/kendaraan']                       = 'admin/kendaraan';
 $route['admin/kendaraan/add']                   = 'admin/kendaraan_add'; // Kalau tidak pakai modal, nambah route ini
-$route['admin/kendaraan-save']                  = 'admin/kendaraan_save';
+$route['admin/kendaraan-save']['post']          = 'admin/kendaraan_save';
 // Ruangan
 $route['admin/ruangan']                         = 'admin/ruangan';
 $route['admin/ruangan/add']                     = 'admin/ruangan_add'; // Kalau tidak pakai modal, nambah route ini
