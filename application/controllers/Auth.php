@@ -53,12 +53,13 @@ class Auth extends CI_Controller
          if ($user->is_active == 1) {
 
             if (password_verify($password, $user->password)) {
-
+               $menu = $this->getMenu($user->id_role);
                $data = [
                   'id_user' => $user->id_user,
                   'username' => $user->username,
                   'role_id' => $user->id_role,
-                  'nama' => $user->nama
+                  'nama' => $user->nama,
+                  'menu' => $menu
                ];
 
                if (isset($_POST['rememberMe'])) {
@@ -76,15 +77,7 @@ class Auth extends CI_Controller
                }
                $this->session->set_userdata($data);
                $this->session->set_flashdata('success', 'Anda berhasil login');
-               if ($data['role_id'] == 1) {
-                  redirect('admin');
-               } else if ($data['role_id'] == 2) {
-                  redirect('kepsek');
-               } else if ($data['role_id'] == 3) {
-                  redirect('pegawai');
-               } else if ($data['role_id'] == 4) {
-                  redirect('user');
-               }
+               redirect($menu);
             } else {
                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password anda salah <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></button></div> ');
                redirect('login');
@@ -98,6 +91,20 @@ class Auth extends CI_Controller
          redirect('login');
       }
    }
+
+   private function getMenu($id_role)
+   {
+      if ($id_role == 1) {
+         return 'admin';
+      } else if ($id_role == 2) {
+         return 'kepsek';
+      } else if ($id_role == 3) {
+         return 'pegawai';
+      } else {
+         return 'user';
+      }
+   }
+
    public function registration()
    {
       if ($this->session->userdata('username')) {

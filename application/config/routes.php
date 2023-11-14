@@ -138,7 +138,7 @@ $route['user/profile-ubahpassword']             = 'user/profile_changepassword';
 
 // Kepsek
 // Dashboard
-$route['kepsek/index']                          = 'kepsek/index';
+$route['kepsek']                          = 'kepsek/index';
 // Menampilkan permintaan pinjam barang pulang, kendaraan, dan ruangan
 $route['kepsek/permintaan']                     = 'kepsek/permintaan';
 // Aksi Approve
@@ -166,7 +166,7 @@ $route['kepsek/profile-ubahpassword']           = 'kepsek/profile_changepassword
 
 // Pegawai
 // Dashboard
-$route['pegawai/index']                         = 'pegawai/index';
+$route['pegawai']                         = 'pegawai/index';
 // Menampilkan permintaan pinjam kendaraan, dan ruangan
 $route['pegawai/permintaan']                    = 'pegawai/permintaan';
 // Aksi Approve
