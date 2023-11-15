@@ -119,4 +119,84 @@ class Admin extends CI_Controller
             redirect('admin/ruangan');
         }
     }
+    public function peminjam()
+    {
+        $data['title'] = 'SPRS | Peminjam';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['peminjam'] = $this->db->get_where('user', ['id_role' => 4])->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/peminjam', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function peminjam_save()
+    {
+        if (!empty($_FILES['image']['tmp_name'])) {
+            $files = $_FILES['image'];
+
+            $fileContent = file_get_contents($files['tmp_name']);
+            $base64File = base64_encode($fileContent);
+
+            $image = 'data:image/png;base64,' . $base64File;
+            $data_peminjam = [
+                'nama' => $this->input->post('nama'),
+                'username' => $this->input->post('username'),
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'image' => $image,
+                'id_role' => 4,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d')
+            ];
+            $this->db->insert('user', $data_peminjam);
+
+            unset($data['base64_files']);
+            $this->session->set_flashdata('success', 'Peminjam berhasil ditambahkan');
+            return redirect('admin/peminjam');
+        } else {
+            $this->session->set_flashdata('error', 'Ruangan gagal ditambahkan karena foto');
+            redirect('admin/peminjam');
+        }
+    }
+    public function supir()
+    {
+        $data['title'] = 'SPRS | Supir';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['supir'] = $this->db->get('supir')->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/supir', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function supir_save()
+    {
+        if (!empty($_FILES['foto_sim']['tmp_name'])) {
+            $files = $_FILES['foto_sim'];
+
+            $fileContent = file_get_contents($files['tmp_name']);
+            $base64File = base64_encode($fileContent);
+
+            $image = 'data:image/png;base64,' . $base64File;
+            $data_peminjam = [
+                'nama' => $this->input->post('nama'),
+                'ttl' => $this->input->post('ttl'),
+                'foto_sim' => $image
+            ];
+            $this->db->insert('supir', $data_peminjam);
+
+            unset($data['base64_files']);
+            $this->session->set_flashdata('success', 'Supir berhasil ditambahkan');
+            return redirect('admin/supir');
+        } else {
+            $this->session->set_flashdata('error', 'Ruangan gagal ditambahkan karena foto');
+            redirect('admin/supir');
+        }
+    }
 }
