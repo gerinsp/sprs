@@ -430,4 +430,104 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
         return redirect('/admin/permintaan');
     }
+    public function penolakan_harian($id_pinjam_barang)
+    {
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+        $data['title'] = 'SPRS | Penolakan Pinjam Harian';
+
+        $data['barang'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, barang.nama AS nama_barang')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/penolakan-harian', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function tolak_harian($id_pinjam_barang)
+    {
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        if ($data_pinjam_barang->is_takeaway == 1 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/admin/permintaan');
+        }
+        $this->db->update('pinjam_barang', ['status' => 'ditolak', 'id_user_confirm' => $this->session->userdata('id_user'), 'pesan' => $this->input->post('pesan')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->session->set_flashdata('success', 'Data berhasil ditolak');
+        return redirect('/admin/permintaan');
+    }
+    public function penolakan_pulang($id_pinjam_barang)
+    {
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+        $data['title'] = 'SPRS | Penolakan Pinjam Pulang';
+
+        $data['barang'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, peminjam.nama AS peminjam, barang.nama AS nama_barang')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/penolakan-pulang', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function tolak_pulang($id_pinjam_barang)
+    {
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        if ($data_pinjam_barang->is_takeaway == 0 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/admin/permintaan');
+        }
+        $this->db->update('pinjam_barang', ['status' => 'ditolak', 'id_user_confirm' => $this->session->userdata('id_user'), 'pesan' => $this->input->post('pesan')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->session->set_flashdata('success', 'Data berhasil ditolak');
+        return redirect('/admin/permintaan');
+    }
+    public function penolakan_ruangan($id_pinjam_ruangan)
+    {
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+        $data['title'] = 'SPRS | Penolakan Pinjam Ruangan';
+
+        $data['ruangan'] = $this->db
+            ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.waktu, ruangan.nama AS nama_ruangan, acara, kebutuhan, keterangan, peminjam.nama AS peminjam')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
+            ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
+            ->get_where('pinjam_ruangan', ['id_pinjam_ruangan' => $id_pinjam_ruangan])->row();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/penolakan-ruangan', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function tolak_ruangan($id_pinjam_ruangan)
+    {
+        $data_pinjam_ruangan = $this->db->get_where('pinjam_ruangan', ['id_pinjam_ruangan' => $id_pinjam_ruangan])->row();
+        if ($data_pinjam_ruangan->is_finish == 1 || $data_pinjam_ruangan->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/admin/permintaan');
+        }
+        $this->db->update('pinjam_ruangan', ['status' => 'ditolak', 'id_user_confirm' => $this->session->userdata('id_user'), 'pesan' => $this->input->post('pesan')], ['id_pinjam_ruangan' => $id_pinjam_ruangan]);
+        $this->session->set_flashdata('success', 'Data berhasil ditolak');
+        return redirect('/admin/permintaan');
+    }
+
+    public function profile()
+    {
+        $data['title'] = 'SPRS | Profile';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/profile', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
 }

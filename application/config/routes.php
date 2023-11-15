@@ -69,21 +69,21 @@ $route['admin/kendaraan-save']['post']          = 'admin/kendaraan_save';
 // Ruangan
 $route['admin/ruangan']                         = 'admin/ruangan';
 $route['admin/ruangan/add']                     = 'admin/ruangan_add'; // Kalau tidak pakai modal, nambah route ini
-$route['admin/ruangan-save']                    = 'admin/ruangan_save';
+$route['admin/ruangan-save']['post']            = 'admin/ruangan_save';
 // Menampilkan permintaan pinjam barang harian, pulang
 $route['admin/permintaan']                      = 'admin/permintaan';
 // Aksi Approve
 $route['admin/approve-harian/(:num)']           = 'admin/approve_harian/$1';
 $route['admin/approve-pulang/(:num)']           = 'admin/approve_pulang/$1';
-$route['admin/approve-ruangan/(:num)']           = 'admin/approve_ruangan/$1';
+$route['admin/approve-ruangan/(:num)']          = 'admin/approve_ruangan/$1';
 // Form Tolak
 $route['admin/penolakan-harian/(:num)']         = 'admin/penolakan_harian/$1';
 $route['admin/penolakan-pulang/(:num)']         = 'admin/penolakan_pulang/$1';
-$route['admin/penolakan-ruangan/(:num)']         = 'admin/penolakan_ruangan/$1';
+$route['admin/penolakan-ruangan/(:num)']        = 'admin/penolakan_ruangan/$1';
 // Aksi Tolak
-$route['admin/tolak-harian/(:num)']             = 'admin/tolak_harian/$1';
-$route['admin/tolak-pulang/(:num)']             = 'admin/tolak_pulang/$1';
-$route['admin/tolak-ruangan/(:num)']             = 'admin/tolak_ruangan/$1';
+$route['admin/tolak-harian/(:num)']['post']     = 'admin/tolak_harian/$1';
+$route['admin/tolak-pulang/(:num)']['post']     = 'admin/tolak_pulang/$1';
+$route['admin/tolak-ruangan/(:num)']['post']    = 'admin/tolak_ruangan/$1';
 // Menampilkan barang harian, pulang, dan ruangan yg sedang dipinjam
 $route['admin/peminjaman']                      = 'admin/peminjaman';
 // Pengembalian
