@@ -312,6 +312,7 @@ class Admin extends CI_Controller
             ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
             ->where('is_takeaway', 1)
             ->where('is_finish', 0)
+            ->where('status', 'diterima')
             ->get('pinjam_barang')
             ->result();
 
@@ -322,6 +323,7 @@ class Admin extends CI_Controller
             ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
             ->where('is_finish', 0)
+            ->where('status', 'diterima')
             ->get('pinjam_kendaraan')
             ->result();
 
@@ -330,7 +332,8 @@ class Admin extends CI_Controller
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
-            ->where('is_finish', 1)
+            ->where('is_finish', 0)
+            ->where('status', 'diterima')
             ->get('pinjam_ruangan')
             ->result();
 
