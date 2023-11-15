@@ -290,6 +290,7 @@ class Admin extends CI_Controller
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
+
     public function peminjaman()
     {
         $data['title'] = 'SPRS | Peminjaman';
@@ -302,6 +303,7 @@ class Admin extends CI_Controller
             ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
             ->where('is_takeaway', 0)
             ->where('is_finish', 0)
+            ->where('status', 'diterima')
             ->get('pinjam_barang')
             ->result();
 
@@ -343,5 +345,89 @@ class Admin extends CI_Controller
         $this->load->view('pages/admin/peminjaman', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
+    }
+    public function permintaan()
+    {
+        $data['title'] = 'SPRS | Peminjaman';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['barang_harian'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam,  barang.nama AS nama_barang')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 0)
+            ->where('is_finish', 0)
+            ->where('status', 'menunggu')
+            ->get('pinjam_barang')
+            ->result();
+
+        $data['barang_pulang'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 1)
+            ->where('is_finish', 0)
+            ->where('status', 'menunggu')
+            ->get('pinjam_barang')
+            ->result();
+
+        $data['ruangan'] = $this->db
+            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
+            ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
+            ->where('is_finish', 0)
+            ->where('status', 'menunggu')
+            ->get('pinjam_ruangan')
+            ->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/permintaan', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function approve_harian($id_pinjam_barang)
+    {
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        if ($data_pinjam_barang->is_takeaway == 1 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/admin/permintaan');
+        }
+        $barang = $this->db->get_where('barang', ['id_barang' => $data_pinjam_barang->id_barang])->row();
+        $stok = (int)$barang->stok - (int)$data_pinjam_barang->quantity;
+        $this->db->update('barang', ['stok' => $stok], ['id_barang' => $data_pinjam_barang->id_barang]);
+
+        $this->db->update('pinjam_barang', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
+        return redirect('/admin/permintaan');
+    }
+    public function approve_pulang($id_pinjam_barang)
+    {
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        if ($data_pinjam_barang->is_takeaway == 0 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/admin/permintaan');
+        }
+
+        $barang = $this->db->get_where('barang', ['id_barang' => $data_pinjam_barang->id_barang])->row();
+        $stok = (int)$barang->stok - (int)$data_pinjam_barang->quantity;
+        $this->db->update('barang', ['stok' => $stok], ['id_barang' => $data_pinjam_barang->id_barang]);
+
+        $this->db->update('pinjam_barang', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
+        return redirect('/admin/permintaan');
+    }
+    public function approve_ruangan($id_pinjam_ruangan)
+    {
+        $data_pinjam_ruangan = $this->db->get_where('pinjam_ruangan', ['id_pinjam_ruangan' => $id_pinjam_ruangan])->row();
+        if ($data_pinjam_ruangan->is_finish == 1 || $data_pinjam_ruangan->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/admin/permintaan');
+        }
+
+        $this->db->update('pinjam_ruangan', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_ruangan' => $id_pinjam_ruangan]);
+        $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
+        return redirect('/admin/permintaan');
     }
 }
