@@ -184,6 +184,9 @@ $route['pegawai/peminjaman']                    = 'pegawai/peminjaman';
 // Laporan/Riwayat Peminjaman approve + reject
 $route['pegawai/peminjaman-kendaraan']          = 'pegawai/peminjaman_kendaraan';
 $route['pegawai/peminjaman-ruangan']            = 'pegawai/peminjaman_ruangan';
+//status peminjaman
+$route['pegawai/status-peminjaman-kendaraan']          = 'pegawai/status_peminjaman_kendaraan';
+$route['pegawai/status-peminjaman-ruangan']            = 'pegawai/status_peminjaman_ruangan';
 //pengembalian
 $route['pegawai/pengembalian/(:num)/kendaraan'] = 'pegawai/pengembalian_kendaraan/$1';
 // profile

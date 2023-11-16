@@ -157,7 +157,32 @@
                      </p>
                   </a>
                </li>
+
+                <?php if ($user->id_role == 3 || $user->id_role == 2) : ?>
+                 <li class="nav-header">Status Peminjaman</li>
+                    <li class="nav-item">
+                        <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-kendaraan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-kendaraan") {
+                            echo "active";
+                        } ?>">
+                            <i class="nav-icon fas fa-car"></i>
+                            <p>
+                                Kendaraan
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-ruangan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-ruangan") {
+                            echo "active";
+                        } ?>">
+                            <i class="nav-icon fas fa-building"></i>
+                            <p>
+                                Ruangan
+                            </p>
+                        </a>
+                    </li>
+                <?php endif; ?>
             <?php endif; ?>
+
             <li class="nav-header">Profil</li>
             <li class="nav-item">
                <a href="<?= base_url($this->session->userdata('menu')) . '/profile' ?>" class="nav-link <?php if ($this->uri->segment(2) == "profile") {
