@@ -175,12 +175,9 @@ $route['pegawai/permintaan']                    = 'pegawai/permintaan';
 // Aksi Approve
 $route['pegawai/approve-kendaraan/(:num)']      = 'pegawai/approve_kendaraan/$1';
 $route['pegawai/approve-ruangan/(:num)']        = 'pegawai/approve_ruangan/$1';
-// Form Tolak
-$route['pegawai/penolakan-kendaraan/(:num)']    = 'pegawai/penolakan_kendaraan/$1';
-$route['pegawai/penolakan-ruangan/(:num)']      = 'pegawai/penolakan_ruangan/$1';
 // Aksi Tolak
-$route['pegawai/tolak-kendaraan/(:num)']        = 'pegawai/tolak_kendaraan/$1';
-$route['pegawai/tolak-ruangan/(:num)']          = 'pegawai/tolak_ruangan/$1';
+$route['pegawai/tolak-kendaraan']               = 'pegawai/tolak_kendaraan';
+$route['pegawai/tolak-ruangan']                 = 'pegawai/tolak_ruangan';
 // Menampilkan kendaraan, dan ruangan yg sedang dipinjam
 $route['pegawai/peminjaman']                    = 'pegawai/peminjaman';
 // Laporan/Riwayat Peminjaman approve + reject
