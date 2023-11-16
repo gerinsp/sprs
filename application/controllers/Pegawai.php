@@ -16,6 +16,9 @@ class Pegawai extends CI_Controller
 
         $data['title'] = 'SPRS | Dashboard';
 
+        $data['kendaraan'] = $this->db->from('pinjam_kendaraan')->where('is_finish', 1)->count_all_results();
+        $data['ruangan'] = $this->db->from('pinjam_ruangan')->where('is_finish', 1)->count_all_results();
+
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);

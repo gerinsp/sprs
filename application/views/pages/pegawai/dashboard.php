@@ -28,18 +28,18 @@
                             >
                                 <div class="col mr-2">
                                     <div
-                                        class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                                        class="text-xs font-weight-bold text-danger text-uppercase mb-1"
                                     >
                                         Peminjaman Kendaraan
                                     </div>
                                     <div
-                                        class="h5 mb-0 font-weight-bold text-gray-800"
+                                        class="h5 mb-0 font-weight-bold"
                                     >
-                                        10
+                                        <?= $kendaraan ?>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="nav-icon fas fa-car fa-2x"></i>
+                                    <i class="nav-icon fas fa-car fa-2x text-danger"></i>
                                 </div>
                             </div>
                         </div>
@@ -57,18 +57,18 @@
                             >
                                 <div class="col mr-2">
                                     <div
-                                        class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+                                        class="text-xs font-weight-bold text-primary text-uppercase mb-1"
                                     >
                                         Peminjaman Ruangan
                                     </div>
                                     <div
-                                        class="h5 mb-0 font-weight-bold text-gray-800"
+                                        class="h5 mb-0 font-weight-bold"
                                     >
-                                        5
+                                        <?= $ruangan ?>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="nav-icon fas fa-building fa-2x"></i>
+                                    <i class="nav-icon fas fa-building fa-2x text-primary"></i>
                                 </div>
                             </div>
                         </div>
