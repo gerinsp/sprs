@@ -87,7 +87,8 @@ $route['admin/tolak-ruangan/(:num)']['post']    = 'admin/tolak_ruangan/$1';
 // Menampilkan barang harian, pulang, dan ruangan yg sedang dipinjam
 $route['admin/peminjaman']                      = 'admin/peminjaman';
 // Pengembalian
-$route['admin/pengembalian/(:num)/barang']      = 'admin/pengembalian_barang/$1';
+$route['admin/pengembalian/(:num)']['get']      = 'admin/pengembalian_barang/$1'; // Form
+$route['admin/pengembalian/(:num)']['post']     = 'admin/kembalikan_barang/$1'; // Aksi
 // Peminjam
 $route['admin/peminjam']                        = 'admin/peminjam';
 $route['admin/peminjam/add']                    = 'admin/peminjam_add'; // Kalau tidak pakai modal, nambah route ini
