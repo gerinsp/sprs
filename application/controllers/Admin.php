@@ -14,13 +14,19 @@ class Admin extends CI_Controller
     public function index()
     {
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
-
         $data['title'] = 'SPRS | Dashboard';
+
+        $data['kendaraan'] = $this->db->from('pinjam_kendaraan')->where('is_finish', 0)->count_all_results();
+        $data['barang_harian'] = $this->db->from('pinjam_barang')->where('is_takeaway', 0)->where('is_finish', 0)->count_all_results();
+        $data['barang_pulang'] = $this->db->from('pinjam_barang')->where('is_takeaway', 1)->where('is_finish', 0)->count_all_results();
+        $data['ruangan'] = $this->db->from('pinjam_ruangan')->where('is_finish', 0)->count_all_results();
+        $data['supir'] = $this->db->from('supir')->count_all_results();
+        $data['peminjam'] = $this->db->from('user')->where('id_role', 4)->count_all_results();
 
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/dashboard', $data);
+        $this->load->view('pages/admin/dashboard', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
