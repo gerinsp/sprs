@@ -14,13 +14,19 @@ class Admin extends CI_Controller
     public function index()
     {
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
-
         $data['title'] = 'SPRS | Dashboard';
+
+        $data['kendaraan'] = $this->db->from('pinjam_kendaraan')->where('is_finish', 0)->count_all_results();
+        $data['barang_harian'] = $this->db->from('pinjam_barang')->where('is_takeaway', 0)->where('is_finish', 0)->count_all_results();
+        $data['barang_pulang'] = $this->db->from('pinjam_barang')->where('is_takeaway', 1)->where('is_finish', 0)->count_all_results();
+        $data['ruangan'] = $this->db->from('pinjam_ruangan')->where('is_finish', 0)->count_all_results();
+        $data['supir'] = $this->db->from('supir')->count_all_results();
+        $data['peminjam'] = $this->db->from('user')->where('id_role', 4)->count_all_results();
 
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/dashboard', $data);
+        $this->load->view('pages/admin/dashboard', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -518,19 +524,6 @@ class Admin extends CI_Controller
         return redirect('/admin/permintaan');
     }
 
-    public function profile()
-    {
-        $data['title'] = 'SPRS | Profile';
-        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
-
-        $this->load->view('templates/head', $data);
-        $this->load->view('templates/navigation', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/admin/profile', $data);
-        $this->load->view('templates/footer');
-        $this->load->view('templates/script', $data);
-    }
-
     public function pengembalian_barang($id_pinjam_barang)
     {
         $data['title'] = 'SPRS | Pengembalian Barang';
@@ -577,5 +570,96 @@ class Admin extends CI_Controller
         }
         $this->session->set_flashdata('error', 'Barang gagal dikembalikan');
         return redirect('/admin/peminjaman');
+    }
+
+    public function profile()
+    {
+        $data['title'] = 'SPRS | Profile';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/profile', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+    public function profile_edit()
+    {
+        $this->db->update('user', ['nama' => $this->input->post('name')], ['id_user' => $this->session->userdata('id_user')]);
+
+        if ($this->db->affected_rows()) {
+            $this->session->set_flashdata('success', 'Nama berhasil diubah');
+            return redirect('/admin/profile');
+        }
+        $this->session->set_flashdata('error', 'Nama gagal diubah');
+        return redirect('/admin/profile');
+    }
+    public function profile_changepassword()
+    {
+        // pasword field di peminjam
+        $data['title'] = 'SPRS | Profile';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+        // var_dump(true);
+        $this->form_validation->set_rules(
+            'current_password',
+            'Current Password',
+            'required|trim',
+            [
+                'required' => 'Password lama tidak boleh kosong'
+            ]
+        );
+
+        $this->form_validation->set_rules(
+            'new_password1',
+            'New Password',
+            'required|min_length[5]|matches[new_password2]',
+            [
+                'required' => 'Password baru tidak boleh kosong',
+                'matches'  => 'Password tidak sama',
+                'min_length' => 'Password minimal 5 karakter',
+            ]
+        );
+
+        $this->form_validation->set_rules(
+            'new_password2',
+            'Confirm New Password',
+            'required|min_length[5]|matches[new_password1]|trim',
+            [
+                'required' => 'Password baru tidak boleh kosong',
+                'matches'  => 'Password Tidak Sama',
+                'min_length' => 'Password minimal 5 karakter',
+            ]
+        );
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/head', $data);
+            $this->load->view('templates/navigation', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('pages/admin/profile', $data);
+            $this->load->view('templates/footer');
+            $this->load->view('templates/script', $data);
+        } else {
+            $current_password = $this->input->post('current_password');
+            $new_password = $this->input->post('new_password1');
+
+            $user = $this->db->get_where('user', ['id_user' => $this->session->userdata('id_user')])->row();
+
+            if (!password_verify($current_password, $user->password)) {
+                $this->session->set_flashdata('error', 'Password lama salah!');
+                redirect('admin/profile');
+            } else {
+                if ($current_password == $new_password) {
+                    $this->session->set_flashdata('error', 'Password baru tidak boleh sama dengan password lama!');
+                    redirect('admin/profile');
+                } else {
+                    //password ok
+                    $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+
+                    $this->db->update('user', ['password' => $password_hash], ['id_user' => $this->session->userdata('id_user')]);
+                    $this->session->set_flashdata('success', 'Password berhasil diubah!');
+                    redirect('admin/profile');
+                }
+            }
+        }
     }
 }

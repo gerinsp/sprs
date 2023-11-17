@@ -103,9 +103,9 @@ $route['admin/peminjaman-pulang']               = 'admin/peminjaman_pulang';
 $route['admin/peminjaman-kendaraan']            = 'admin/peminjaman_kendaraan';
 $route['admin/peminjaman-ruangan']              = 'admin/peminjaman_ruangan';
 // profile
-$route['admin/profile']                         = 'admin/profile';
-$route['admin/profile-edit']                    = 'admin/profile_edit';
-$route['admin/profile-ubahpassword']            = 'admin/profile_changepassword';
+$route['admin/profile']['get']                         = 'admin/profile';
+$route['admin/profile-edit']['post']            = 'admin/profile_edit';
+$route['admin/profile']['post']                 = 'admin/profile_changepassword';
 // End of Admin
 
 // User

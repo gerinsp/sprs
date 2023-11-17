@@ -48,7 +48,17 @@
                                         <label for="password">Password Peminjam</label>
                                     </div>
                                     <div class="col-md-5">
-                                        <input class="form-control" required name="password" id="password" type="text">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password" name="password">
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text bg-white border-left-0 <?= (form_error('password')) ? 'border-danger rounded-right' : ''; ?>">
+                                                        <a role="button" onclick="previewPassword(this, 'password')"><span class="fa fa-fw fa-sm fa-eye-slash text-black-50"></span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?= form_error('password', '<small class="text-danger pl-2">', '</small>'); ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:10px">
