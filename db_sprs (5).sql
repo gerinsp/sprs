@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 19, 2023 at 01:05 PM
+-- Generation Time: Nov 19, 2023 at 01:23 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 5.6.40
 
@@ -42,7 +42,7 @@ CREATE TABLE `tbl_barang` (
 --
 
 INSERT INTO `tbl_barang` (`id_barang`, `nama`, `kode`, `stok`, `lokasi`, `kondisi`) VALUES
-(1, 'Laptop HP Pavilion', 'HP001', 2, 'Rak 1', 'Sangat Baik'),
+(1, 'Laptop HP Pavilion', 'HP001', 0, 'Rak 1', 'Sangat Baik'),
 (2, 'Printer Epson L3150', 'EPSON002', 5, 'Rak 2', 'Baik'),
 (3, 'Mouse Logitech G502', 'LOGI003', 15, 'Rak 3', 'Sangat Baik'),
 (4, 'Keyboard Mechanical Razer', 'RAZER004', 8, 'Rak 4', 'Kurang Baik'),
@@ -89,18 +89,6 @@ CREATE TABLE `tbl_pengembalian_barang` (
   `id_penerima` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tbl_pengembalian_barang`
---
-
-INSERT INTO `tbl_pengembalian_barang` (`id_pengembalian_barang`, `id_pinjam_barang`, `waktu_pengembalian`, `kondisi_barang`, `denda`, `keterangan`, `id_penerima`) VALUES
-(1, 1, '2023-01-15 14:30:00', 'Baik', '0', 'Barang dalam kondisi baik', 1),
-(2, 2, '2023-01-16 10:45:00', 'Kurang Baik', '20.000', 'Perlu perbaikan kecil', 1),
-(3, 3, '2023-01-17 09:15:00', 'Sangat Baik', '0', 'Tidak ada masalah', 1),
-(4, 4, '2023-01-18 16:20:00', 'Baik', '0', 'Barang kembali tepat waktu', 1),
-(5, 5, '2023-01-19 13:00:00', 'Baik', '0', 'Pengembalian tanpa masalah', 1),
-(6, 1, '2023-11-18 20:16:52', 'bagus', '', 'good', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -116,15 +104,6 @@ CREATE TABLE `tbl_pengembalian_kendaraan` (
   `keterangan` varchar(255) NOT NULL,
   `id_penerima` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tbl_pengembalian_kendaraan`
---
-
-INSERT INTO `tbl_pengembalian_kendaraan` (`id_pengembalian_kendaraan`, `id_pinjam_kendaraan`, `waktu_pengembalian`, `denda`, `kilometer_akhir`, `keterangan`, `id_penerima`) VALUES
-(3, 3, '2023-02-03 10:15:00', '0', '22000', 'Kendaraan kembali tepat waktu dan dalam kondisi baik', 3),
-(6, 5, '2023-11-18 18:17:23', '', '50000', 'aman sentosa', 3),
-(7, 1, '2023-11-19 17:34:48', '10000', '100000', 'terlambat mengembalikan', 3);
 
 -- --------------------------------------------------------
 
@@ -153,10 +132,8 @@ CREATE TABLE `tbl_pinjam_barang` (
 --
 
 INSERT INTO `tbl_pinjam_barang` (`id_pinjam_barang`, `id_peminjam`, `id_barang`, `quantity`, `is_takeaway`, `alasan_pinjam`, `kondisi_barang`, `estimasi_pengembalian`, `is_finish`, `status`, `id_user_confirm`, `pesan`, `created_at`) VALUES
-(1, 4, 1, 2, 1, 'Kebutuhan proyek kantor', 'Sangat Baik', '2023-03-01 16:00:00', 1, 'diterima', 1, 'barang penuh cuy', '2023-02-01 10:30:00'),
-(2, 4, 3, 1, 0, '', '', '0000-00-00 00:00:00', 0, 'ditolak', 1, 'Maaf, stok barang tidak mencukupi', '2023-02-02 11:45:00'),
+(1, 4, 1, 2, 1, 'Kebutuhan proyek kantor', 'Sangat Baik', '2023-03-01 16:00:00', 0, 'diterima', 2, 'gak bisa', '2023-02-01 10:30:00'),
 (3, 4, 5, 3, 1, 'Acara pameran produk', 'Kurang Baik', '2023-03-03 12:00:00', 1, 'diterima', 2, '', '2023-02-03 09:15:00'),
-(4, 4, 2, 1, 0, '', '', '0000-00-00 00:00:00', 0, 'ditolak', 1, 'barang habis', '2023-02-04 16:20:00'),
 (5, 4, 4, 2, 1, 'Penting untuk meeting', 'Sangat Baik', '2023-03-05 14:00:00', 1, 'diterima', 2, '', '2023-02-05 13:00:00');
 
 -- --------------------------------------------------------
@@ -184,9 +161,9 @@ CREATE TABLE `tbl_pinjam_kendaraan` (
 --
 
 INSERT INTO `tbl_pinjam_kendaraan` (`id_pinjam_kendaraan`, `id_peminjam`, `id_kendaraan`, `kilometer_awal`, `waktu`, `id_supir`, `is_finish`, `status`, `id_user_confirm`, `pesan`, `created_at`) VALUES
-(1, 4, 1, '10000', '2023-03-01 10:00:00', 1, 1, 'diterima', 3, '', '2023-02-01 08:30:00'),
+(1, 4, 1, '10000', '2023-03-01 10:00:00', 1, 1, 'diterima', 2, '', '2023-02-01 08:30:00'),
 (2, 4, 3, '20000', '2023-03-02 12:30:00', 2, 0, 'ditolak', 2, 'Maaf, kendaraan tidak tersedia', '2023-02-02 10:45:00'),
-(3, 4, 5, '15000', '2023-03-03 14:45:00', 3, 0, 'diterima', 2, '', '2023-02-03 12:00:00'),
+(3, 4, 5, '15000', '2023-03-03 14:45:00', 3, 1, 'diterima', 2, '', '2023-02-03 12:00:00'),
 (4, 4, 2, '18000', '2023-03-04 16:00:00', 4, 0, 'ditolak', 3, 'Kendaraan sedang dalam perbaikan', '2023-02-04 14:20:00'),
 (5, 4, 4, '25000', '2023-03-05 18:15:00', 5, 1, 'diterima', 3, '', '2023-02-05 16:30:00');
 
@@ -216,7 +193,7 @@ CREATE TABLE `tbl_pinjam_ruangan` (
 --
 
 INSERT INTO `tbl_pinjam_ruangan` (`id_pinjam_ruangan`, `id_peminjam`, `id_ruangan`, `acara`, `waktu`, `kebutuhan`, `keterangan`, `is_finish`, `status`, `id_user_confirm`, `pesan`, `created_at`) VALUES
-(1, 4, 1, 'Rapat Kelas 1A', '2023-03-01 14:00:00', 'Proyek kelas', 'Membutuhkan proyektor', 1, 'diterima', 3, '', '2023-02-01 10:30:00'),
+(1, 4, 1, 'Rapat Kelas 1A', '2023-11-19 14:00:00', 'Proyek kelas', 'Membutuhkan proyektor', 1, 'diterima', 2, '', '2023-02-01 10:30:00'),
 (2, 4, 2, 'Presentasi Kelas 2B', '2023-03-02 10:30:00', 'Materi pelajaran', 'Diperlukan meja dan kursi tambahan', 0, 'ditolak', 3, 'kelas tidak tersedia', '2023-02-02 09:45:00'),
 (3, 4, 3, 'Pelatihan Lab Komputer', '2023-11-18 13:45:00', 'Pengenalan software', 'Diperlukan akses internet', 1, 'diterima', 2, '', '2023-02-03 12:00:00'),
 (4, 4, 4, 'Baca Buku di Perpustakaan', '2023-03-04 16:00:00', 'Baca buku bersama', 'Tidak ada kebutuhan khusus', 0, 'ditolak', 2, 'kelas penuh', '2023-02-04 14:20:00'),
@@ -325,7 +302,7 @@ CREATE TABLE `tbl_user` (
 INSERT INTO `tbl_user` (`id_user`, `username`, `password`, `nama`, `image`, `id_role`, `is_active`, `created_at`) VALUES
 (1, 'admin', '$2y$10$wAmswudyG5EcSE1NLUfdZuRlHCgjecs1h9oHU4joKJDcHmidVN7iq', 'IT Administrator', '', 1, 1, '2023-11-08'),
 (2, 'kepsek', '$2y$10$NPCJndSSMOkukIv836d.kuumjKTzC/OhxVIpZUS60D.KHEwKnzxPK', 'Kepala Sekolah', '', 2, 1, '2023-11-15'),
-(3, 'pegawai', '$2y$10$XJacaPD27P.7F8k1QTG3ZOwECWuF6Qe8RWxQWJnVtCd50d0PQN/XG', 'Pegawai', '', 3, 1, '2023-11-15'),
+(3, 'pegawai', '$2y$10$eQ3dvZf50k4eh.dpyXx3GORM2CpKmee5TQ828nrYYINMX7BNNhQ.q', 'Pegawai', '', 3, 1, '2023-11-15'),
 (4, 'peminjam', '$2y$10$XmqYZdDh.hiJxZxafQOodO/ZNd5FbImxZtWsroLuMLsZb9MyQKrda', 'Peminjam', '', 4, 1, '2023-11-15'),
 (6, 'sena', '$2y$10$ammEcsqrHUTkO6N44BgI/uziwfbs8vo6e8zYwcS2SkIDMrsPwCkEC', 'sena', 'data:image/png;base64,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', 4, 1, '2023-11-19');
 
@@ -413,7 +390,7 @@ ALTER TABLE `tbl_pengembalian_barang`
 -- AUTO_INCREMENT for table `tbl_pengembalian_kendaraan`
 --
 ALTER TABLE `tbl_pengembalian_kendaraan`
-  MODIFY `id_pengembalian_kendaraan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_pengembalian_kendaraan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbl_pinjam_barang`

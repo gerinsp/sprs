@@ -199,8 +199,7 @@
             $('#btn-save').on('click', function() {
                 const data = {
                     id_pinjam_kendaraan: idPinjam,
-                    pesan: $('#pesan').val(),
-                    id_user_confirm: idConfirm
+                    pesan: $('#pesan').val()
                 };
 
                 $.ajax({
@@ -231,8 +230,7 @@
             $('#btn-save').on('click', function() {
                 const data = {
                     id_pinjam_ruangan: idPinjam,
-                    pesan: $('#pesan').val(),
-                    id_user_confirm: idConfirm
+                    pesan: $('#pesan').val()
                 };
 
                 $.ajax({
@@ -263,8 +261,7 @@
             $('#btn-save').on('click', function() {
                 const data = {
                     id_pinjam_barang: idPinjam,
-                    pesan: $('#pesan').val(),
-                    id_user_confirm: idConfirm
+                    pesan: $('#pesan').val()
                 };
 
                 $.ajax({

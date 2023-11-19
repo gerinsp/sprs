@@ -112,7 +112,7 @@ class Kepsek extends CI_Controller
     public function tolak_pulang()
     {
         $pesan = $this->input->post('pesan');
-        $id_user_confirm = $this->input->post('id_user_confirm');
+        $id_user_confirm = $this->session->userdata('id_user');
         $id_pinjam_barang = $this->input->post('id_pinjam_barang');
 
         $data_pinjam_barang = $this->db->get_where('pinjam_barang', [
@@ -142,7 +142,7 @@ class Kepsek extends CI_Controller
     public function tolak_kendaraan()
     {
         $pesan = $this->input->post('pesan');
-        $id_user_confirm = $this->input->post('id_user_confirm');
+        $id_user_confirm = $this->session->userdata('id_user');
         $id_pinjam_kendaraan = $this->input->post('id_pinjam_kendaraan');
         $this->db->where('id_pinjam_kendaraan', $id_pinjam_kendaraan)->update('pinjam_kendaraan', [
             'id_user_confirm' => $id_user_confirm,
@@ -159,7 +159,7 @@ class Kepsek extends CI_Controller
     public function tolak_ruangan()
     {
         $pesan = $this->input->post('pesan');
-        $id_user_confirm = $this->input->post('id_user_confirm');
+        $id_user_confirm = $this->session->userdata('id_user');
         $id_pinjam_ruangan = $this->input->post('id_pinjam_ruangan');
         $this->db->where('id_pinjam_ruangan', $id_pinjam_ruangan)->update('pinjam_ruangan', [
             'id_user_confirm' => $id_user_confirm,
