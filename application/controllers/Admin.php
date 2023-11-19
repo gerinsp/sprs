@@ -663,4 +663,59 @@ class Admin extends CI_Controller
             }
         }
     }
+    public function riwayat_peminjaman_ditolak()
+    {
+        $data['title'] = 'SPRS | Peminjaman Ditolak';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['barang_harian'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang, pinjam_barang.pesan')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 0)
+            ->where('is_finish', 0)
+            ->where('status', 'ditolak')
+            ->get('pinjam_barang')
+            ->result();
+
+        $data['barang_pulang'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima, pinjam_barang.pesan')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 1)
+            ->where('is_finish', 0)
+            ->where('status', 'ditolak')
+            ->get('pinjam_barang')
+            ->result();
+
+        $data['kendaraan'] = $this->db
+            ->select('pinjam_kendaraan.id_pinjam_kendaraan, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima, pinjam_kendaraan.pesan')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_kendaraan.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
+            ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
+            ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
+            ->where('is_finish', 0)
+            ->where('status', 'ditolak')
+            ->get('pinjam_kendaraan')
+            ->result();
+
+        $data['ruangan'] = $this->db
+            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.pesan')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
+            ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
+            ->where('is_finish', 0)
+            ->where('status', 'ditolak')
+            ->get('pinjam_ruangan')
+            ->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/admin/peminjaman-ditolak', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
 }

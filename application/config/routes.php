@@ -102,6 +102,7 @@ $route['admin/peminjaman-harian']               = 'admin/peminjaman_harian';
 $route['admin/peminjaman-pulang']               = 'admin/peminjaman_pulang';
 $route['admin/peminjaman-kendaraan']            = 'admin/peminjaman_kendaraan';
 $route['admin/peminjaman-ruangan']              = 'admin/peminjaman_ruangan';
+$route['admin/riwayat-peminjaman-ditolak']       = 'admin/riwayat_peminjaman_ditolak';
 // profile
 $route['admin/profile']['get']                         = 'admin/profile';
 $route['admin/profile-edit']['post']            = 'admin/profile_edit';
