@@ -12,10 +12,10 @@
       <a href="<?= base_url('profile') ?>" class="d-block">
          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-               <?php if(!$user->image) { ?>
-                <img src="<?= base_url('assets/img/profile/default.png') ?>" class="img-circle elevation-2" alt="User Image">
+               <?php if (!$user->image) { ?>
+                  <img src="<?= base_url('assets/img/profile/default.png') ?>" class="img-circle elevation-2" alt="User Image">
                <?php } else { ?>
-                <img src="<?= $user->image ?>" class="img-circle elevation-2" alt="User Image">
+                  <img src="<?= $user->image ?>" class="img-circle elevation-2" alt="User Image">
                <?php } ?>
             </div>
             <div class="info">
@@ -237,6 +237,18 @@
                      <i class="nav-icon fas fa-building"></i>
                      <p>
                         Ruangan
+                     </p>
+                  </a>
+               </li>
+            <?php endif; ?>
+            <?php if ($user->id_role == 1) : ?>
+               <li class="nav-item">
+                  <a href="<?= base_url($this->session->userdata('menu')) . '/riwayat-peminjaman-ditolak' ?>" class="nav-link <?php if ($this->uri->segment(2) == "riwayat-peminjaman-ditolak") {
+                                                                                                                                 echo "active";
+                                                                                                                              } ?>">
+                     <i class="nav-icon fas fa-recycle"></i>
+                     <p>
+                        Peminjaman Ditolak
                      </p>
                   </a>
                </li>
