@@ -12,7 +12,11 @@
       <a href="<?= base_url('profile') ?>" class="d-block">
          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-               <img src="<?= base_url('assets/img/profile/') . $user->image ?>" class="img-circle elevation-2" alt="User Image">
+               <?php if(!$user->image) { ?>
+                <img src="<?= base_url('assets/img/profile/default.png') ?>" class="img-circle elevation-2" alt="User Image">
+               <?php } else { ?>
+                <img src="<?= $user->image ?>" class="img-circle elevation-2" alt="User Image">
+               <?php } ?>
             </div>
             <div class="info">
                <p style="margin-bottom: 0px;"><?= $user->nama ?></p>

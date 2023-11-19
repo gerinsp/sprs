@@ -100,8 +100,12 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="3%"><?php echo $no ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->username ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
-                                                    <img src="<?php echo $data->image ?>" alt="<?php echo $data->nama ?>" width="60%">
+                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" class="text-center" width="12%">
+                                                <?php if(!$data->image) { ?>
+                                                    <img src="<?= base_url('assets/img/profile/default.png') ?>" class="img-circle elevation-2" alt="User Image" width="20%">
+                                                <?php } else { ?>
+                                                    <img src="<?php echo $data->image ?>" alt="<?php echo $data->nama ?>" width="50%">
+                                                <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php

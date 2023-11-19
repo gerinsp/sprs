@@ -136,8 +136,8 @@ $route['user/riwayat-peminjaman-ditolak']       = 'user/riwayat_peminjaman_ditol
 $route['user/riwayat-pengembalian-barang']      = 'user/riwayat_pengembalian_barang';
 $route['user/riwayat-pengembalian-ruangan']     = 'user/riwayat_pengembalian_ruangan';
 // Profile
-$route['user/profile']                          = 'user/profile';
-$route['user/profile-ubahpassword']             = 'user/profile_changepassword';
+$route['user/profile']['get']                   = 'user/profile';
+$route['user/profile-ubahpassword']['post']     = 'user/profile_changepassword';
 // End of User
 
 // Kepsek
@@ -168,8 +168,8 @@ $route['kepsek/status-peminjaman-kendaraan']    = 'kepsek/status_peminjaman_kend
 $route['kepsek/status-peminjaman-ruangan']      = 'kepsek/status_peminjaman_ruangan';
 $route['kepsek/status-peminjaman-pulang']       = 'kepsek/status_peminjaman_pulang';
 // Profile
-$route['kepsek/profile']                        = 'kepsek/profile';
-$route['kepsek/profile-ubahpassword']           = 'kepsek/profile_changepassword';
+$route['kepsek/profile']['get']                 = 'kepsek/profile';
+$route['kepsek/profile-ubahpassword']['post']   = 'kepsek/profile_changepassword';
 // End of Kepsek
 
 // Pegawai
@@ -194,8 +194,8 @@ $route['pegawai/status-peminjaman-ruangan']     = 'pegawai/status_peminjaman_rua
 //pengembalian
 $route['pegawai/pengembalian/kendaraan']        = 'pegawai/pengembalian_kendaraan';
 // profile
-$route['pegawai/profile']                       = 'pegawai/profile';
-$route['pegawai/profile-ubahpassword']          = 'pegawai/profile_changepassword';
+$route['pegawai/profile']['get']                 = 'pegawai/profile';
+$route['pegawai/profile-ubahpassword']['post']   = 'pegawai/profile_changepassword';
 // End of Pegawai
 
 $route['404_override'] = '';

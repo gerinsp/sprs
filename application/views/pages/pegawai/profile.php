@@ -22,7 +22,7 @@
          <div class="row">
             <div class="col-md-3">
                <!-- Profile Image -->
-               <form action="<?= base_url($this->session->userdata('menu')) ?>/profile-edit" method="post">
+               <form action="#">
                   <div class="card card-primary card-outline">
                      <div class="card-body box-profile">
                         <div class="text-center">
@@ -53,7 +53,7 @@
                      <h4>Ubah Password</h4>
                   </div><!-- /.card-header -->
                   <div class="card-body">
-                     <form action="<?= base_url($this->session->userdata('menu')) ?>/profile" method="post">
+                     <form action="<?= base_url($this->session->userdata('menu')) ?>/profile-ubahpassword" method="post">
                         <div class="box-body">
                            <div class="row">
                               <div class="col-md-6">

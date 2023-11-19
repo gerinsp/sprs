@@ -341,7 +341,7 @@ class Admin extends CI_Controller
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
-            ->where('is_finish', 0)
+            ->where('waktu >=', date('Y-m-d'))
             ->where('status', 'diterima')
             ->get('pinjam_ruangan')
             ->result();
@@ -433,7 +433,7 @@ class Admin extends CI_Controller
             return redirect('/admin/permintaan');
         }
 
-        $this->db->update('pinjam_ruangan', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_ruangan' => $id_pinjam_ruangan]);
+        $this->db->update('pinjam_ruangan', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user'), 'is_finish' => 1], ['id_pinjam_ruangan' => $id_pinjam_ruangan]);
         $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
         return redirect('/admin/permintaan');
     }

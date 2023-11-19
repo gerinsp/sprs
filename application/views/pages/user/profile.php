@@ -22,7 +22,7 @@
          <div class="row">
             <div class="col-md-3">
                <!-- Profile Image -->
-               <form action="<?= base_url($this->session->userdata('menu')) ?>/profile-edit" method="post">
+               <form>
                   <div class="card card-primary card-outline">
                      <div class="card-body box-profile">
                         <div class="text-center">
@@ -33,14 +33,12 @@
 
                         <ul class="list-group list-group-unbordered">
                            <li class="list-group-item">
-                              <b>Nama</b><br> <input type="text" class="form-control" id="name" name="name" value="<?= $user->nama ?>"><input type="hidden" class="form-control" id="id_user" name="id" value="<?= $user->id_user ?>" readonly>
+                              <b>Nama</b><br> <input readonly type="text" class="form-control" id="name" name="name" value="<?= $user->nama ?>"><input type="hidden" class="form-control" id="id_user" name="id" value="<?= $user->id_user ?>" readonly>
                            </li>
                            <li class="list-group-item">
                               <b>Username</b><br> <input type="text" name="username" class="form-control" value="<?= $user->username ?>" disabled>
                            </li>
                         </ul>
-
-                        <button type="submit" class="btn btn-primary btn-block">Ubah Nama Profile</button>
                      </div>
                      <!-- /.card-body -->
                   </div>
@@ -54,7 +52,7 @@
                      <h4>Ubah Password</h4>
                   </div><!-- /.card-header -->
                   <div class="card-body">
-                     <form action="<?= base_url($this->session->userdata('menu')) ?>/profile" method="post">
+                     <form action="<?= base_url($this->session->userdata('menu')) ?>/profile-ubahpassword" method="post">
                         <div class="box-body">
                            <div class="row">
                               <div class="col-md-6">
