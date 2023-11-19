@@ -88,6 +88,7 @@
                      </p>
                   </a>
                </li>
+
             <?php endif; ?>
 
             <?php if ($user->id_role != 4) : ?>
@@ -158,42 +159,84 @@
                   </a>
                </li>
 
-                <?php if ($user->id_role == 3 || $user->id_role == 2) : ?>
-                 <li class="nav-header">Status Peminjaman</li>
-                    <li class="nav-item">
-                        <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-kendaraan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-kendaraan") {
-                            echo "active";
-                        } ?>">
-                            <i class="nav-icon fas fa-car"></i>
-                            <p>
-                                Kendaraan
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-ruangan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-ruangan") {
-                            echo "active";
-                        } ?>">
-                            <i class="nav-icon fas fa-building"></i>
-                            <p>
-                                Ruangan
-                            </p>
-                        </a>
-                    </li>
-                <?php endif; ?>
-             <?php if ($user->id_role == 3 || $user->id_role == 2) : ?>
-                <li class="nav-item">
-                    <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-pulang' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-pulang") {
-                        echo "active";
-                    } ?>">
-                        <i class="nav-icon fas fa-shopping-bag"></i>
+               <?php if ($user->id_role == 3 || $user->id_role == 2) : ?>
+                  <li class="nav-header">Status Peminjaman</li>
+                  <li class="nav-item">
+                     <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-kendaraan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-kendaraan") {
+                                                                                                                                       echo "active";
+                                                                                                                                    } ?>">
+                        <i class="nav-icon fas fa-car"></i>
                         <p>
-                            Barang Bawa Pulang
+                           Kendaraan
                         </p>
-                    </a>
-                </li>
-                <?php endif; ?>            <?php endif; ?>
-
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-ruangan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-ruangan") {
+                                                                                                                                    echo "active";
+                                                                                                                                 } ?>">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                           Ruangan
+                        </p>
+                     </a>
+                  </li>
+               <?php endif; ?>
+            <?php endif; ?>
+            <?php if ($user->id_role == 4) : ?>
+               <li class="nav-header">Transaksi</li>
+               <li class="nav-item">
+                  <a href="<?= base_url($this->session->userdata('menu')) . '/peminjaman' ?>" class="nav-link <?php if ($this->uri->segment(2) == "peminjaman") {
+                                                                                                                  echo "active";
+                                                                                                               } ?>">
+                     <i class="nav-icon fas fa-recycle"></i>
+                     <p>
+                        Peminjaman
+                     </p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="<?= base_url($this->session->userdata('menu')) . '/riwayat-peminjaman-ditolak' ?>" class="nav-link <?php if ($this->uri->segment(2) == "riwayat-peminjaman-ditolak") {
+                                                                                                                                 echo "active";
+                                                                                                                              } ?>">
+                     <i class="nav-icon fas fa-recycle"></i>
+                     <p>
+                        Peminjaman Ditolak
+                     </p>
+                  </a>
+               </li>
+               <li class="nav-header">Riwayat Peminjaman</li>
+               <li class="nav-item">
+                  <a href="<?= base_url($this->session->userdata('menu')) . '/riwayat-peminjaman-barang' ?>" class="nav-link <?php if ($this->uri->segment(2) == "riwayat-peminjaman-barang") {
+                                                                                                                                 echo "active";
+                                                                                                                              } ?>">
+                     <i class="nav-icon fas fa-calendar-day"></i>
+                     <p>
+                        Barang
+                     </p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="<?= base_url($this->session->userdata('menu')) . '/riwayat-peminjaman-kendaraan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "riwayat-peminjaman-kendaraan") {
+                                                                                                                                    echo "active";
+                                                                                                                                 } ?>">
+                     <i class="nav-icon fas fa-car"></i>
+                     <p>
+                        Kendaraan
+                     </p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a href="<?= base_url($this->session->userdata('menu')) . '/riwayat-peminjaman-ruangan' ?>" class="nav-link <?php if ($this->uri->segment(2) == "riwayat-peminjaman-ruangan") {
+                                                                                                                                 echo "active";
+                                                                                                                              } ?>">
+                     <i class="nav-icon fas fa-building"></i>
+                     <p>
+                        Ruangan
+                     </p>
+                  </a>
+               </li>
+            <?php endif; ?>
             <li class="nav-header">Profil</li>
             <li class="nav-item">
                <a href="<?= base_url($this->session->userdata('menu')) . '/profile' ?>" class="nav-link <?php if ($this->uri->segment(2) == "profile") {
