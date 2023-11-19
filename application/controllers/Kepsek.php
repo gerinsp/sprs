@@ -1,6 +1,6 @@
 <?php
 
-class Pegawai extends CI_Controller
+class Kepsek extends CI_Controller
 {
     public function __construct()
     {
@@ -17,13 +17,14 @@ class Pegawai extends CI_Controller
 
         $data['title'] = 'SPRS | Dashboard';
 
-        $data['kendaraan'] = $this->db->from('pinjam_kendaraan')->where('is_finish', 1)->count_all_results();
-        $data['ruangan'] = $this->db->from('pinjam_ruangan')->where('is_finish', 1)->count_all_results();
+        $data['kendaraan'] = $this->db->from('pinjam_kendaraan')->where('is_finish', 0)->count_all_results();
+        $data['barang_pulang'] = $this->db->from('pinjam_barang')->where('is_takeaway', 1)->where('is_finish', 0)->count_all_results();
+        $data['ruangan'] = $this->db->from('pinjam_ruangan')->where('is_finish', 0)->count_all_results();
 
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/dashboard', $data);
+        $this->load->view('pages/kepsek/dashboard', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -32,6 +33,16 @@ class Pegawai extends CI_Controller
     {
         $data['title'] = 'SPRS | Permintaan';
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['barang_pulang'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 1)
+            ->where('is_finish', 0)
+            ->where('status', 'menunggu')
+            ->get('pinjam_barang')
+            ->result();
 
         $data['ruangan'] = $this->db
             ->select('pinjam_ruangan.id_pinjam_ruangan, user.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan')
@@ -55,7 +66,7 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/permintaan', $data);
+        $this->load->view('pages/kepsek/permintaan', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -68,7 +79,7 @@ class Pegawai extends CI_Controller
             'status' => 'diterima'
         ]);
         $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
-        redirect('/pegawai/permintaan');
+        redirect('/kepsek/permintaan');
     }
     public function approve_ruangan($id_pinjam_ruangan)
     {
@@ -79,7 +90,54 @@ class Pegawai extends CI_Controller
             'is_finish' => 1
         ]);
         $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
-        redirect('/pegawai/permintaan');
+        redirect('/kepsek/permintaan');
+    }
+    public function approve_pulang($id_pinjam_barang)
+    {
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        if ($data_pinjam_barang->is_takeaway == 0 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/kepsek/permintaan');
+        }
+
+        $barang = $this->db->get_where('barang', ['id_barang' => $data_pinjam_barang->id_barang])->row();
+        $stok = (int)$barang->stok - (int)$data_pinjam_barang->quantity;
+        $this->db->update('barang', ['stok' => $stok], ['id_barang' => $data_pinjam_barang->id_barang]);
+
+        $this->db->update('pinjam_barang', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
+        return redirect('/kepsek/permintaan');
+    }
+
+    public function tolak_pulang()
+    {
+        $pesan = $this->input->post('pesan');
+        $id_user_confirm = $this->input->post('id_user_confirm');
+        $id_pinjam_barang = $this->input->post('id_pinjam_barang');
+
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', [
+            'id_pinjam_barang' => $id_pinjam_barang
+        ])->row();
+
+        if ($data_pinjam_barang->is_takeaway == 0 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+            $response = array(
+                'status' => 'ok',
+                'message' => 'Data tidak dalam antrian pinjam'
+            );
+            $this->output->set_content_type('application/json')->set_output(json_encode($response));
+        }
+        $this->db->where('id_pinjam_barang', $id_pinjam_barang)->update('pinjam_barang', [
+            'status' => 'ditolak',
+            'id_user_confirm' => $id_user_confirm,
+            'pesan' => $pesan
+        ]);
+
+        $response = array(
+            'status' => 'ok',
+            'message' => 'Data berhasil ditolak'
+        );
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
     public function tolak_kendaraan()
     {
@@ -132,6 +190,17 @@ class Pegawai extends CI_Controller
             ->get('pinjam_kendaraan')
             ->result();
 
+        $data['barang_pulang'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 1)
+            ->where('is_finish', 0)
+            ->where('status', 'diterima')
+            ->get('pinjam_barang')
+            ->result();
+
         $data['ruangan'] = $this->db
             ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
@@ -145,7 +214,32 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/peminjaman', $data);
+        $this->load->view('pages/kepsek/peminjaman', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+
+    public function peminjaman_pulang()
+    {
+        $data['title'] = 'SPRS | Laporan Barang Pulang';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['barang'] = $this->db
+            ->select('peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, 
+            barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, 
+            penerima.nama AS penerima')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 1)
+            ->where('is_finish', 1)
+            ->get('pinjam_barang')
+            ->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/kepsek/peminjaman-pulang', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -168,7 +262,7 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/peminjaman-kendaraan', $data);
+        $this->load->view('pages/kepsek/peminjaman-kendaraan', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -189,7 +283,7 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/peminjaman-ruangan', $data);
+        $this->load->view('pages/kepsek/peminjaman-ruangan', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -218,7 +312,7 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/status-peminjaman-kendaraan', $data);
+        $this->load->view('pages/kepsek/status-peminjaman-kendaraan', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -240,7 +334,35 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/status-peminjaman-ruangan', $data);
+        $this->load->view('pages/kepsek/status-peminjaman-ruangan', $data);
+        $this->load->view('templates/footer');
+        $this->load->view('templates/script', $data);
+    }
+
+    public function status_peminjaman_pulang()
+    {
+        $data['title'] = 'SPRS | Laporan Kendaraan';
+        $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
+
+        $data['barang'] = $this->db
+            ->select('peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, 
+            barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, 
+            penerima.nama AS penerima, pinjam_barang.status, pinjam_barang.pesan,
+            pengembalian.waktu_pengembalian AS waktu_kembali')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->join('pengembalian_barang pengembalian', 'pengembalian.id_pinjam_barang = pinjam_barang.id_pinjam_barang')
+            ->where('is_takeaway', 1)
+            ->where('is_finish', 1)
+            ->or_where('status', 'ditolak')
+            ->get('pinjam_barang')
+            ->result();
+
+        $this->load->view('templates/head', $data);
+        $this->load->view('templates/navigation', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('pages/kepsek/status-peminjaman-pulang', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -274,6 +396,7 @@ class Pegawai extends CI_Controller
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
+
     public function profile()
     {
         $data['title'] = 'SPRS | Profile';
@@ -282,7 +405,7 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/head', $data);
         $this->load->view('templates/navigation', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('pages/pegawai/profile', $data);
+        $this->load->view('pages/kepsek/profile', $data);
         $this->load->view('templates/footer');
         $this->load->view('templates/script', $data);
     }
@@ -328,7 +451,7 @@ class Pegawai extends CI_Controller
             $this->load->view('templates/head', $data);
             $this->load->view('templates/navigation', $data);
             $this->load->view('templates/sidebar', $data);
-            $this->load->view('pages/pegawai/profile', $data);
+            $this->load->view('pages/kepsek/profile', $data);
             $this->load->view('templates/footer');
             $this->load->view('templates/script', $data);
         } else {
@@ -339,18 +462,18 @@ class Pegawai extends CI_Controller
 
             if (!password_verify($current_password, $user->password)) {
                 $this->session->set_flashdata('error', 'Password lama salah!');
-                redirect('pegawai/profile');
+                redirect('kepsek/profile');
             } else {
                 if ($current_password == $new_password) {
                     $this->session->set_flashdata('error', 'Password baru tidak boleh sama dengan password lama!');
-                    redirect('pegawai/profile');
+                    redirect('kepsek/profile');
                 } else {
                     //password ok
                     $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
 
                     $this->db->update('user', ['password' => $password_hash], ['id_user' => $this->session->userdata('id_user')]);
                     $this->session->set_flashdata('success', 'Password berhasil diubah!');
-                    redirect('pegawai/profile');
+                    redirect('kepsek/profile');
                 }
             }
         }

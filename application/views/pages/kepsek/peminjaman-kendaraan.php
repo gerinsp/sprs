@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Status Peminjaman Kendaraan</h1>
+                    <h1>Laporan Peminjaman Kendaraan</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -34,14 +34,10 @@
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;"><?php echo $this->lang->line('number'); ?></th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Peminjam</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Kembali</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Kendaraan</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kilometer Awal</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kilometer Akhir</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Supir</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Status</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Alasan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -53,21 +49,10 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="3%"><?php echo $no ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->peminjam ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo date('j M Y H:i:s', strtotime($data->waktu_pinjam)) ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->waktu_kembali ? date('j M Y H:i:s', strtotime($data->waktu_kembali)) : '' ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_kendaraan ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kilometer_awal ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kilometer_akhir ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_supir ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="10%">
-                                                    <?php if ($data->status == 'diterima') : ?>
-                                                        <span class="badge badge-primary"><?= $data->status ?></span>
-                                                    <?php endif; ?>
-                                                    <?php if ($data->status == 'ditolak') : ?>
-                                                        <span class="badge badge-danger"><?= $data->status ?></span>
-                                                    <?php endif; ?>
-                                                </td>
+                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->nama_supir ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->pesan ?></td>
                                             </tr>
                                         <?php
                                             $no++;

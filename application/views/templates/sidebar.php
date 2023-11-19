@@ -181,7 +181,18 @@
                         </a>
                     </li>
                 <?php endif; ?>
-            <?php endif; ?>
+             <?php if ($user->id_role == 3 || $user->id_role == 2) : ?>
+                <li class="nav-item">
+                    <a href="<?= base_url($this->session->userdata('menu')) . '/status-peminjaman-pulang' ?>" class="nav-link <?php if ($this->uri->segment(2) == "status-peminjaman-pulang") {
+                        echo "active";
+                    } ?>">
+                        <i class="nav-icon fas fa-shopping-bag"></i>
+                        <p>
+                            Barang Bawa Pulang
+                        </p>
+                    </a>
+                </li>
+                <?php endif; ?>            <?php endif; ?>
 
             <li class="nav-header">Profil</li>
             <li class="nav-item">

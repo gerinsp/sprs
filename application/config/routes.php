@@ -154,15 +154,19 @@ $route['kepsek/penolakan-pulang/(:num)']        = 'kepsek/penolakan_pulang/$1';
 $route['kepsek/penolakan-kendaraan/(:num)']     = 'kepsek/penolakan_kendaraan/$1';
 $route['kepsek/penolakan-ruangan/(:num)']       = 'kepsek/penolakan_ruangan/$1';
 // Aksi Tolak
-$route['kepsek/tolak-pulang/(:num)']            = 'kepsek/tolak_pulang/$1';
-$route['kepsek/tolak-kendaraan/(:num)']         = 'kepsek/tolak_kendaraan/$1';
-$route['kepsek/tolak-ruangan/(:num)']           = 'kepsek/tolak_ruangan/$1';
+$route['kepsek/tolak-pulang']                   = 'kepsek/tolak_pulang';
+$route['kepsek/tolak-kendaraan']                = 'kepsek/tolak_kendaraan';
+$route['kepsek/tolak-ruangan']                  = 'kepsek/tolak_ruangan';
 // Menampilkan barang pulang, kendaraan, dan ruangan yg sedang dipinjam
 $route['kepsek/peminjaman']                     = 'kepsek/peminjaman';
 // Laporan/Riwayat Peminjaman approve + reject
 $route['kepsek/peminjaman-pulang']              = 'kepsek/peminjaman_pulang';
 $route['kepsek/peminjaman-kendaraan']           = 'kepsek/peminjaman_kendaraan';
 $route['kepsek/peminjaman-ruangan']             = 'kepsek/peminjaman_ruangan';
+
+$route['kepsek/status-peminjaman-kendaraan']    = 'kepsek/status_peminjaman_kendaraan';
+$route['kepsek/status-peminjaman-ruangan']      = 'kepsek/status_peminjaman_ruangan';
+$route['kepsek/status-peminjaman-pulang']       = 'kepsek/status_peminjaman_pulang';
 // Profile
 $route['kepsek/profile']                        = 'kepsek/profile';
 $route['kepsek/profile-ubahpassword']           = 'kepsek/profile_changepassword';
@@ -185,10 +189,10 @@ $route['pegawai/peminjaman']                    = 'pegawai/peminjaman';
 $route['pegawai/peminjaman-kendaraan']          = 'pegawai/peminjaman_kendaraan';
 $route['pegawai/peminjaman-ruangan']            = 'pegawai/peminjaman_ruangan';
 //status peminjaman
-$route['pegawai/status-peminjaman-kendaraan']          = 'pegawai/status_peminjaman_kendaraan';
-$route['pegawai/status-peminjaman-ruangan']            = 'pegawai/status_peminjaman_ruangan';
+$route['pegawai/status-peminjaman-kendaraan']   = 'pegawai/status_peminjaman_kendaraan';
+$route['pegawai/status-peminjaman-ruangan']     = 'pegawai/status_peminjaman_ruangan';
 //pengembalian
-$route['pegawai/pengembalian/(:num)/kendaraan'] = 'pegawai/pengembalian_kendaraan/$1';
+$route['pegawai/pengembalian/kendaraan']        = 'pegawai/pengembalian_kendaraan';
 // profile
 $route['pegawai/profile']                       = 'pegawai/profile';
 $route['pegawai/profile-ubahpassword']          = 'pegawai/profile_changepassword';

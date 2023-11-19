@@ -8,6 +8,7 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->model('Models', 'm');
         cekuser();
+        date_default_timezone_set('Asia/Jakarta');
         // dd($this->session->userdata('nama'));
     }
 
