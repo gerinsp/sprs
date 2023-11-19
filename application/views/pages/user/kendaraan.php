@@ -153,7 +153,7 @@
                         title: '',
                         text: 'Peminjaman kendaraan berhasil disimpan'
                      }).then(function() {
-                        window.location.reload();
+                        window.location.href = "<?= base_url($this->session->userdata('menu')) ?>/peminjaman"
                      });
                   }
                },

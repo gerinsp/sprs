@@ -188,7 +188,7 @@
                      title: '',
                      text: 'Peminjaman harian berhasil disimpan'
                   }).then(function() {
-                     window.location.reload();
+                     window.location.href = "<?= base_url($this->session->userdata('menu')) ?>/peminjaman"
                   });
                }
             },
@@ -235,7 +235,7 @@
                         title: '',
                         text: 'Peminjaman bawa pulang berhasil disimpan'
                      }).then(function() {
-                        window.location.reload();
+                        window.location.href = "<?= base_url($this->session->userdata('menu')) ?>/peminjaman"
                      });
                   }
                },
