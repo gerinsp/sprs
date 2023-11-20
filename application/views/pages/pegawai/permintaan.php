@@ -66,51 +66,6 @@
                             </div>
                         </div>
                     </div>
-                    <h4>Ruangan</h4>
-                    <div class="shadow card">
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table style="border-collapse: 1;color: #858796;border-bottom: 2px solid #e3e6f0;" id="dataTable" class="table tablelist table-bordered table-striped" width="100%" height="1px" cellspacing="0">
-                                    <thead>
-                                        <tr height="20px">
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;"><?php echo $this->lang->line('number'); ?></th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Peminjam</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Ruangan</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Acara</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kebutuhan</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Keterangan</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $no = 1;
-                                        foreach ($ruangan as $data) {
-                                        ?>
-                                            <tr>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="3%"><?php echo $no ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->peminjam ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo date('j M Y H:i:s', strtotime($data->waktu_pinjam)) ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_ruangan ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->acara ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kebutuhan ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->keterangan ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
-                                                    <a href="<?= base_url($this->session->userdata('menu')) ?>/approve-ruangan/<?= $data->id_pinjam_ruangan; ?>" class="btn btn-primary">Konfirmasi</a>
-                                                    <a id-confirm="<?php $this->session->userdata('id_user') ?>" id-pinjam="<?= $data->id_pinjam_ruangan ?>" id="btn-ruangan" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger">Tolak</a>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                            $no++;
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -168,37 +123,6 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'sukses',
-                                text: 'Data berhasil ditolak'
-                            }).then(function () {
-                                window.location.reload();
-                            });
-                        }
-                    },
-                    error: function(error) {
-                    }
-                });
-            });
-        });
-
-        $('#btn-ruangan').on('click', function() {
-            const idPinjam = $('#btn-ruangan').attr('id-pinjam');
-            const idConfirm = $('#btn-ruangan').attr('id-confirm');
-
-            $('#btn-save').on('click', function() {
-                const data = {
-                    id_pinjam_ruangan: idPinjam,
-                    pesan: $('#pesan').val()
-                };
-
-                $.ajax({
-                    url: '<?= base_url($this->session->userdata('menu')) ?>/tolak-ruangan',
-                    method: 'POST',
-                    data: data,
-                    success: function(response) {
-                        if(response.status == 'ok') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sukses',
                                 text: 'Data berhasil ditolak'
                             }).then(function () {
                                 window.location.reload();
