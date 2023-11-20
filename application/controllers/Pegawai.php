@@ -91,6 +91,7 @@ class Pegawai extends CI_Controller
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
             ->where('is_finish', 0)
             ->where('status', 'diterima')
+            ->where('penerima.id_role', 2)
             ->get('pinjam_kendaraan')
             ->result();
 

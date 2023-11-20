@@ -58,10 +58,12 @@ class Kepsek extends CI_Controller
         $data['kendaraan'] = $this->db
             ->select('pinjam_kendaraan.id_pinjam_kendaraan, user.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan,  pinjam_kendaraan.kilometer_awal, supir.nama as nama_supir')
             ->join('user', 'user.id_user = pinjam_kendaraan.id_peminjam', 'left')
+            ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
             ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan', 'left')
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir', 'left')
             ->where('is_finish', 0)
-            ->where('status', 'menunggu')
+            ->where('status', 'diterima')
+            ->where('penerima.id_role', 3)
             ->get('pinjam_kendaraan')
             ->result();
 
@@ -189,6 +191,7 @@ class Kepsek extends CI_Controller
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
             ->where('is_finish', 0)
             ->where('status', 'diterima')
+            ->where('penerima.id_role', 2)
             ->get('pinjam_kendaraan')
             ->result();
 
