@@ -54,7 +54,7 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
-                                                    <a href="<?= base_url($this->session->userdata('menu')) ?>/pengembalian/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Pengembalian</a>
+                                                    <a href="<?= base_url($this->session->userdata('menu')) ?>/pengembalian-harian/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Pengembalian</a>
                                                 </td>
                                             </tr>
                                         <?php

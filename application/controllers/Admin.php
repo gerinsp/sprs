@@ -573,6 +573,24 @@ class Admin extends CI_Controller
         return redirect('/admin/peminjaman');
     }
 
+    public function kembalikan_barang_harian($id_pinjam_barang)
+    {
+        $pinjam_barang = $this->db->select('quantity,id_barang')->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        // Update stok
+        $barang = $this->db->select('stok')->get_where('barang', ['id_barang' => $pinjam_barang->id_barang])->row();
+        $stok = (int)$barang->stok + (int)$pinjam_barang->quantity;
+
+        if ($this->db->affected_rows()) {
+            $this->db->update('pinjam_barang', ['is_finish' => 1], ['id_pinjam_barang' => $id_pinjam_barang]);
+            $this->db->update('barang', ['stok' => $stok], ['id_barang' => $pinjam_barang->id_barang]);
+
+            $this->session->set_flashdata('success', 'Barang berhasil dikembalikan');
+            return redirect('/admin/peminjaman');
+        }
+        $this->session->set_flashdata('error', 'Barang gagal dikembalikan');
+        return redirect('/admin/peminjaman');
+    }
+
     public function profile()
     {
         $data['title'] = 'SPRS | Profile';
