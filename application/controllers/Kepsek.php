@@ -37,10 +37,12 @@ class Kepsek extends CI_Controller
         $data['barang_pulang'] = $this->db
             ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam')
             ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
             ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
             ->where('is_takeaway', 1)
             ->where('is_finish', 0)
-            ->where('status', 'menunggu')
+            ->where('status', 'diterima')
+            ->where('penerima.id_role', 1)
             ->get('pinjam_barang')
             ->result();
 
@@ -95,7 +97,7 @@ class Kepsek extends CI_Controller
     public function approve_pulang($id_pinjam_barang)
     {
         $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
-        if ($data_pinjam_barang->is_takeaway == 0 || $data_pinjam_barang->is_finish == 1 || $data_pinjam_barang->status != 'menunggu') {
+        if ($data_pinjam_barang->is_takeaway == 0 || $data_pinjam_barang->is_finish == 1) {
             $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
             return redirect('/kepsek/permintaan');
         }
@@ -198,6 +200,7 @@ class Kepsek extends CI_Controller
             ->where('is_takeaway', 1)
             ->where('is_finish', 0)
             ->where('status', 'diterima')
+            ->where('penerima.id_role', 2)
             ->get('pinjam_barang')
             ->result();
 

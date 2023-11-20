@@ -322,6 +322,7 @@ class Admin extends CI_Controller
             ->where('is_takeaway', 1)
             ->where('is_finish', 0)
             ->where('status', 'diterima')
+            ->where('penerima.id_role', 2)
             ->get('pinjam_barang')
             ->result();
 
