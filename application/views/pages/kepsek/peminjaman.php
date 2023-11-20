@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <!-- /.card -->
                     <?= $this->session->flashdata('message'); ?>
-                    <h2>Barang Pulang</h2>
+                    <h4>Barang Pulang</h4>
                     <div class="shadow card" style="margin-bottom: 30px;">
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <h2>Kendaraan</h2>
+                    <h4>Kendaraan</h4>
                     <div class="shadow card" style="margin-bottom: 30px;">
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-                    <h2>Ruangan</h2>
+                    <h4>Ruangan</h4>
                     <div class="shadow card">
                         <!-- /.card-header -->
                         <div class="card-body">
