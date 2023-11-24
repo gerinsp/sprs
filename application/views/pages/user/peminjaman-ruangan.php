@@ -38,7 +38,7 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Acara</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kebutuhan</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Keterangan</th>
-                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
+                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;" colspan="2" class="text-center">Status</th>
                               </tr>
                            </thead>
                            <tbody>
@@ -54,7 +54,10 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->acara ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kebutuhan ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->keterangan ?></td>
-                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
+                                     <?php if($data->id_penerima == 1) : ?>
+                                         <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Kepala Sekolah Approve</td>
+                                         <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">IT Approve</td>
+                                     <?php endif; ?>
                                  </tr>
                               <?php
                                  $no++;

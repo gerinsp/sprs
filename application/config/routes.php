@@ -90,6 +90,11 @@ $route['admin/peminjaman']                      = 'admin/peminjaman';
 $route['admin/pengembalian/(:num)']['get']      = 'admin/pengembalian_barang/$1'; // Form
 $route['admin/pengembalian/(:num)']['post']     = 'admin/kembalikan_barang/$1'; // Aksi
 $route['admin/pengembalian-harian/(:num)']      = 'admin/kembalikan_barang_harian/$1'; // Aksi
+
+//konfirmasi pengembalian
+$route['admin/konfirmasi-pulang/(:num)']       = 'admin/konfirmasi_barang_pulang/$1'; // Aksi
+$route['admin/konfirmasi-harian/(:num)']       = 'admin/konfirmasi_barang_harian/$1'; // Aksi
+
 // Peminjam
 $route['admin/peminjam']                        = 'admin/peminjam';
 $route['admin/peminjam/add']                    = 'admin/peminjam_add'; // Kalau tidak pakai modal, nambah route ini
@@ -103,9 +108,9 @@ $route['admin/peminjaman-harian']               = 'admin/peminjaman_harian';
 $route['admin/peminjaman-pulang']               = 'admin/peminjaman_pulang';
 $route['admin/peminjaman-kendaraan']            = 'admin/peminjaman_kendaraan';
 $route['admin/peminjaman-ruangan']              = 'admin/peminjaman_ruangan';
-$route['admin/riwayat-peminjaman-ditolak']       = 'admin/riwayat_peminjaman_ditolak';
+$route['admin/riwayat-peminjaman-ditolak']      = 'admin/riwayat_peminjaman_ditolak';
 // profile
-$route['admin/profile']['get']                         = 'admin/profile';
+$route['admin/profile']['get']                  = 'admin/profile';
 $route['admin/profile-edit']['post']            = 'admin/profile_edit';
 $route['admin/profile']['post']                 = 'admin/profile_changepassword';
 // End of Admin
@@ -137,6 +142,11 @@ $route['user/riwayat-peminjaman-ditolak']       = 'user/riwayat_peminjaman_ditol
 
 $route['user/riwayat-pengembalian-barang']      = 'user/riwayat_pengembalian_barang';
 $route['user/riwayat-pengembalian-ruangan']     = 'user/riwayat_pengembalian_ruangan';
+//pengembalian
+$route['user/pengembalian/kendaraan/(:num)']    = 'user/kembalikan_kendaraan/$1';
+$route['user/pengembalian/(:num)']              = 'user/kembalikan_barang/$1'; // Aksi
+$route['user/pengembalian/harian/(:num)']       = 'user/kembalikan_barang_harian/$1'; // Aksi
+
 // Profile
 $route['user/profile']['get']                   = 'user/profile';
 $route['user/profile-ubahpassword']['post']     = 'user/profile_changepassword';
@@ -144,10 +154,11 @@ $route['user/profile-ubahpassword']['post']     = 'user/profile_changepassword';
 
 // Kepsek
 // Dashboard
-$route['kepsek']                          = 'kepsek/index';
+$route['kepsek']                                = 'kepsek/index';
 // Menampilkan permintaan pinjam barang pulang, kendaraan, dan ruangan
 $route['kepsek/permintaan']                     = 'kepsek/permintaan';
 // Aksi Approve
+$route['kepsek/approve-harian/(:num)']          = 'kepsek/approve_harian/$1';
 $route['kepsek/approve-pulang/(:num)']          = 'kepsek/approve_pulang/$1';
 $route['kepsek/approve-kendaraan/(:num)']       = 'kepsek/approve_kendaraan/$1';
 $route['kepsek/approve-ruangan/(:num)']         = 'kepsek/approve_ruangan/$1';
@@ -156,6 +167,7 @@ $route['kepsek/penolakan-pulang/(:num)']        = 'kepsek/penolakan_pulang/$1';
 $route['kepsek/penolakan-kendaraan/(:num)']     = 'kepsek/penolakan_kendaraan/$1';
 $route['kepsek/penolakan-ruangan/(:num)']       = 'kepsek/penolakan_ruangan/$1';
 // Aksi Tolak
+$route['kepsek/tolak-harian']                   = 'kepsek/tolak_harian';
 $route['kepsek/tolak-pulang']                   = 'kepsek/tolak_pulang';
 $route['kepsek/tolak-kendaraan']                = 'kepsek/tolak_kendaraan';
 $route['kepsek/tolak-ruangan']                  = 'kepsek/tolak_ruangan';
@@ -195,6 +207,8 @@ $route['pegawai/status-peminjaman-kendaraan']   = 'pegawai/status_peminjaman_ken
 $route['pegawai/status-peminjaman-ruangan']     = 'pegawai/status_peminjaman_ruangan';
 //pengembalian
 $route['pegawai/pengembalian/kendaraan']        = 'pegawai/pengembalian_kendaraan';
+// konfirmasi pengembalian
+$route['pegawai/konfirmasi-kendaraan/(:num)']   = 'pegawai/konfirmasi_kendaraan/$1'; // Aksi
 // profile
 $route['pegawai/profile']['get']                 = 'pegawai/profile';
 $route['pegawai/profile-ubahpassword']['post']   = 'pegawai/profile_changepassword';

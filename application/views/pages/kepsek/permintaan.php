@@ -24,6 +24,47 @@
                 <div class="col-12">
                     <!-- /.card -->
                     <?= $this->session->flashdata('message'); ?>
+                    <h4>Barang Harian</h4>
+                    <div class="shadow card" style="margin-bottom: 30px;">
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table style="border-collapse: 1;color: #858796;border-bottom: 2px solid #e3e6f0;" id="dataTable" class="table tablelist table-bordered table-striped" width="100%" height="1px" cellspacing="0">
+                                    <thead>
+                                    <tr height="20px">
+                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;"><?php echo $this->lang->line('number'); ?></th>
+                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Peminjam</th>
+                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
+                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
+                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
+                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $no = 1;
+                                    foreach ($barang_harian as $data) {
+                                        ?>
+                                        <tr>
+                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="3%"><?php echo $no ?></td>
+                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->peminjam ?></td>
+                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo date('j M Y H:i:s', strtotime($data->waktu_pinjam)) ?></td>
+                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
+                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
+                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
+                                                <a href="<?= base_url($this->session->userdata('menu')) ?>/approve-harian/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Konfirmasi</a>
+                                                <a id-confirm="<?php $this->session->userdata('id_user') ?>" id-pinjam="<?= $data->id_pinjam_barang ?>" id="btn-barang-harian" data-toggle="modal" data-target="#exampleModal" href="#" class="btn btn-danger">Tolak</a> </td>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        $no++;
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <h4>Barang Pulang</h4>
                     <div class="shadow card" style="margin-bottom: 30px;">
                         <!-- /.card-header -->
@@ -194,7 +235,6 @@
     $(document).ready(() => {
         $('#btn-kendaraan').on('click', function() {
             const idPinjam = $('#btn-kendaraan').attr('id-pinjam');
-            const idConfirm = $('#btn-kendaraan').attr('id-confirm');
 
             $('#btn-save').on('click', function() {
                 const data = {
@@ -225,7 +265,6 @@
 
         $('#btn-ruangan').on('click', function() {
             const idPinjam = $('#btn-ruangan').attr('id-pinjam');
-            const idConfirm = $('#btn-ruangan').attr('id-confirm');
 
             $('#btn-save').on('click', function() {
                 const data = {
@@ -256,7 +295,6 @@
 
         $('#btn-barang').on('click', function() {
             const idPinjam = $('#btn-barang').attr('id-pinjam');
-            const idConfirm = $('#btn-barang').attr('id-confirm');
 
             $('#btn-save').on('click', function() {
                 const data = {
@@ -285,6 +323,36 @@
             });
         });
 
+
+        $('#btn-barang-harian').on('click', function() {
+            const idPinjam = $('#btn-barang-harian').attr('id-pinjam');
+            console.log(idPinjam)
+            $('#btn-save').on('click', function() {
+                const data = {
+                    id_pinjam_barang: idPinjam,
+                    pesan: $('#pesan').val()
+                };
+
+                $.ajax({
+                    url: '<?= base_url($this->session->userdata('menu')) ?>/tolak-harian',
+                    method: 'POST',
+                    data: data,
+                    success: function(response) {
+                        if(response.status == 'ok') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses',
+                                text: response.message
+                            }).then(function () {
+                                window.location.reload();
+                            });
+                        }
+                    },
+                    error: function(error) {
+                    }
+                });
+            });
+        });
     })
 </script>
 

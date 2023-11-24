@@ -161,48 +161,48 @@ class User extends CI_Controller
       $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
       $data['barang_harian'] = $this->db
-         ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang')
-         ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
-         ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
-         ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+         ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.status, penerima.id_role as id_penerima, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang')
+         ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam', 'left')
+         ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm', 'left')
+         ->join('barang', 'barang.id_barang = pinjam_barang.id_barang', 'left')
          ->where('is_takeaway', 0)
          ->where('is_finish', 0)
-         ->where('status', 'diterima')
+         ->where('status !=', 'ditolak')
          ->where('id_peminjam',  $this->session->userdata('id_user'))
          ->get('pinjam_barang')
          ->result();
 
       $data['barang_pulang'] = $this->db
-         ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima')
-         ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
-         ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
-         ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+         ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima')
+         ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam', 'left')
+         ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm', 'left')
+         ->join('barang', 'barang.id_barang = pinjam_barang.id_barang', 'left')
          ->where('is_takeaway', 1)
          ->where('is_finish', 0)
-         ->where('status', 'diterima')
+          ->where('status !=', 'ditolak')
          ->where('id_peminjam',  $this->session->userdata('id_user'))
          ->get('pinjam_barang')
          ->result();
 
       $data['kendaraan'] = $this->db
-         ->select('pinjam_kendaraan.id_pinjam_kendaraan, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima')
-         ->join('user peminjam', 'peminjam.id_user = pinjam_kendaraan.id_peminjam')
-         ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
-         ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
-         ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
+         ->select('pinjam_kendaraan.id_pinjam_kendaraan, pinjam_kendaraan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima')
+         ->join('user peminjam', 'peminjam.id_user = pinjam_kendaraan.id_peminjam', 'left')
+         ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm', 'left')
+         ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan', 'left')
+         ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir', 'left')
          ->where('is_finish', 0)
-         ->where('status', 'diterima')
+          ->where('status !=', 'ditolak')
          ->where('id_peminjam',  $this->session->userdata('id_user'))
          ->get('pinjam_kendaraan')
          ->result();
 
       $data['ruangan'] = $this->db
-         ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
-         ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
-         ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
-         ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
+         ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+         ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam', 'left')
+         ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm', 'left')
+         ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan', 'left')
          ->where('is_finish', 0)
-         ->where('status', 'diterima')
+          ->where('status !=', 'ditolak')
          ->where('id_peminjam',  $this->session->userdata('id_user'))
          ->get('pinjam_ruangan')
          ->result();
@@ -221,7 +221,7 @@ class User extends CI_Controller
       $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
       $data['barangpinjamanharian'] = $this->db
-         ->select('pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang')
+         ->select('pinjam_barang.created_at AS waktu_pinjam, penerima.id_role as id_penerima, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang')
          ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
          ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
@@ -233,7 +233,7 @@ class User extends CI_Controller
 
 
       $data['barangpinjamanbawapulang'] = $this->db
-         ->select('peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima')
+         ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima')
          ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
          ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
@@ -257,7 +257,7 @@ class User extends CI_Controller
       $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
       $data['kendaraan'] = $this->db
-         ->select('peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima')
+         ->select('peminjam.nama AS peminjam,penerima.id_role as id_penerima, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima')
          ->join('user peminjam', 'peminjam.id_user = pinjam_kendaraan.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
          ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
@@ -280,7 +280,7 @@ class User extends CI_Controller
       $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
       $data['ruangan'] = $this->db
-         ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+         ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
          ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
          ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -302,7 +302,7 @@ class User extends CI_Controller
       $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
       $data['barang_harian'] = $this->db
-         ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang, pinjam_barang.pesan')
+         ->select('pinjam_barang.id_pinjam_barang, penerima.id_role as id_penolak, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang, pinjam_barang.pesan')
          ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
          ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
@@ -314,7 +314,7 @@ class User extends CI_Controller
          ->result();
 
       $data['barang_pulang'] = $this->db
-         ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima, pinjam_barang.pesan')
+         ->select('pinjam_barang.id_pinjam_barang, penerima.id_role as id_penolak, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, penerima.nama AS penerima, pinjam_barang.pesan')
          ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
          ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
@@ -326,7 +326,7 @@ class User extends CI_Controller
          ->result();
 
       $data['kendaraan'] = $this->db
-         ->select('pinjam_kendaraan.id_pinjam_kendaraan, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima, pinjam_kendaraan.pesan')
+         ->select('pinjam_kendaraan.id_pinjam_kendaraan, penerima.id_role as id_penolak, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima, pinjam_kendaraan.pesan')
          ->join('user peminjam', 'peminjam.id_user = pinjam_kendaraan.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
          ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
@@ -338,7 +338,7 @@ class User extends CI_Controller
          ->result();
 
       $data['ruangan'] = $this->db
-         ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.pesan')
+         ->select('pinjam_ruangan.id_pinjam_ruangan, penerima.id_role as id_penolak, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.pesan')
          ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
          ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
          ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -355,6 +355,62 @@ class User extends CI_Controller
       $this->load->view('templates/footer');
       $this->load->view('templates/script', $data);
    }
+
+    public function kembalikan_barang($id_pinjam_barang)
+    {
+        $waktu_pengembalian = date('Y-m-d H:i:s');
+
+        $this->db->insert('pengembalian_barang', [
+            'id_pinjam_barang' => $id_pinjam_barang,
+            'waktu_pengembalian' => $waktu_pengembalian,
+
+            'id_penerima' => $this->session->userdata('role_id'),
+        ]);
+
+        if ($this->db->affected_rows()) {
+            $this->db->update('pinjam_barang', [
+                'status' => 'pengembalian'
+            ], ['id_pinjam_barang' => $id_pinjam_barang]);
+
+            $this->session->set_flashdata('success', 'Berhasil melakukan request pengembalian');
+            return redirect('/user/peminjaman');
+        }
+        $this->session->set_flashdata('error', 'Gagal melakukan request pengembalian');
+        return redirect('/user/peminjaman');
+    }
+
+    public function kembalikan_barang_harian($id_pinjam_barang)
+    {
+        $this->db->update('pinjam_barang', [
+            'status' => 'pengembalian'
+        ], ['id_pinjam_barang' => $id_pinjam_barang]);
+
+        $this->session->set_flashdata('success', 'Berhasil melakukan request pengembalian');
+        return redirect('/user/peminjaman');
+    }
+
+    public function kembalikan_kendaraan($id_pinjam_kendaraan)
+    {
+        $id_penerima = $this->session->userdata('id_user');
+        $waktu_pengembalian = date('Y-m-d H:i:s');
+
+        $this->db->insert('pengembalian_kendaraan', [
+            'id_pinjam_kendaraan' => $id_pinjam_kendaraan,
+            'waktu_pengembalian' => $waktu_pengembalian,
+            'id_penerima' => $id_penerima
+        ]);
+
+        if ($this->db->affected_rows()) {
+            $this->db->where('id_pinjam_kendaraan', $id_pinjam_kendaraan)->update('pinjam_kendaraan', [
+                'status' => 'pengembalian'
+            ]);
+
+            $this->session->set_flashdata('success', 'Berhasil melakukan request pengembalian');
+            return redirect('/user/peminjaman');
+        }
+        $this->session->set_flashdata('error', 'Gagal melakukan request pengembalian');
+        return redirect('/user/peminjaman');
+    }
 
    public function profile()
    {

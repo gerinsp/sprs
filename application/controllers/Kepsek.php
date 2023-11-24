@@ -34,6 +34,18 @@ class Kepsek extends CI_Controller
         $data['title'] = 'SPRS | Permintaan';
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
+        $data['barang_harian'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam,  barang.nama AS nama_barang')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 0)
+            ->where('is_finish', 0)
+            ->where('status', 'diterima')
+            ->where('penerima.id_role', 1)
+            ->get('pinjam_barang')
+            ->result();
+
         $data['barang_pulang'] = $this->db
             ->select('pinjam_barang.id_pinjam_barang, peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam')
             ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
@@ -58,12 +70,10 @@ class Kepsek extends CI_Controller
         $data['kendaraan'] = $this->db
             ->select('pinjam_kendaraan.id_pinjam_kendaraan, user.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan,  pinjam_kendaraan.kilometer_awal, supir.nama as nama_supir')
             ->join('user', 'user.id_user = pinjam_kendaraan.id_peminjam', 'left')
-            ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
             ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan', 'left')
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir', 'left')
             ->where('is_finish', 0)
-            ->where('status', 'diterima')
-            ->where('penerima.id_role', 3)
+            ->where('status', 'menunggu')
             ->get('pinjam_kendaraan')
             ->result();
 
@@ -91,7 +101,7 @@ class Kepsek extends CI_Controller
             'id_user_confirm' => $this->session->userdata('id_user'),
             'pesan' => '',
             'status' => 'diterima',
-            'is_finish' => 1
+            'is_finish' => 0
         ]);
         $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
         redirect('/kepsek/permintaan');
@@ -104,6 +114,21 @@ class Kepsek extends CI_Controller
             return redirect('/kepsek/permintaan');
         }
 
+        $barang = $this->db->get_where('barang', ['id_barang' => $data_pinjam_barang->id_barang])->row();
+        $stok = (int)$barang->stok - (int)$data_pinjam_barang->quantity;
+        $this->db->update('barang', ['stok' => $stok], ['id_barang' => $data_pinjam_barang->id_barang]);
+
+        $this->db->update('pinjam_barang', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
+        return redirect('/kepsek/permintaan');
+    }
+    public function approve_harian($id_pinjam_barang)
+    {
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', ['id_pinjam_barang' => $id_pinjam_barang])->row();
+        if ($data_pinjam_barang->is_takeaway == 1 || $data_pinjam_barang->is_finish == 1) {
+            $this->session->set_flashdata('error', 'Data tidak dalam antrian pinjam');
+            return redirect('/kepsek/permintaan');
+        }
         $barang = $this->db->get_where('barang', ['id_barang' => $data_pinjam_barang->id_barang])->row();
         $stok = (int)$barang->stok - (int)$data_pinjam_barang->quantity;
         $this->db->update('barang', ['stok' => $stok], ['id_barang' => $data_pinjam_barang->id_barang]);
@@ -143,6 +168,38 @@ class Kepsek extends CI_Controller
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
+
+    public function tolak_harian()
+    {
+        $pesan = $this->input->post('pesan');
+        $id_user_confirm = $this->session->userdata('id_user');
+        $id_pinjam_barang = $this->input->post('id_pinjam_barang');
+
+        $data_pinjam_barang = $this->db->get_where('pinjam_barang', [
+            'id_pinjam_barang' => $id_pinjam_barang
+        ])->row();
+
+        if ($data_pinjam_barang->is_takeaway == 1 || $data_pinjam_barang->is_finish == 1) {
+            $response = array(
+                'status' => 'ok',
+                'message' => 'Data tidak dalam antrian pinjam'
+            );
+            $this->output->set_content_type('application/json')->set_output(json_encode($response));
+        }
+        $this->db->update('pinjam_barang', [
+            'status' => 'ditolak',
+            'id_user_confirm' => $id_user_confirm,
+            'pesan' => $pesan
+        ], ['id_pinjam_barang' => $id_pinjam_barang]);
+
+        $response = array(
+            'status' => 'ok',
+            'message' => 'Data berhasil ditolak'
+        );
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+    }
+
     public function tolak_kendaraan()
     {
         $pesan = $this->input->post('pesan');
@@ -178,6 +235,7 @@ class Kepsek extends CI_Controller
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
+
     public function peminjaman()
     {
         $data['title'] = 'SPRS | Peminjaman';
@@ -190,9 +248,21 @@ class Kepsek extends CI_Controller
             ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
             ->where('is_finish', 0)
-            ->where('status', 'diterima')
-            ->where('penerima.id_role', 2)
+            ->where_in('status', ['diterima', 'pengembalian'])
+            ->where('id_user_confirm', 3)
             ->get('pinjam_kendaraan')
+            ->result();
+
+        $data['barang_harian'] = $this->db
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang')
+            ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
+            ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
+            ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
+            ->where('is_takeaway', 0)
+            ->where('is_finish', 0)
+            ->where_in('status', ['diterima', 'pengembalian'])
+            ->where('id_user_confirm', 2)
+            ->get('pinjam_barang')
             ->result();
 
         $data['barang_pulang'] = $this->db
@@ -202,8 +272,8 @@ class Kepsek extends CI_Controller
             ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
             ->where('is_takeaway', 1)
             ->where('is_finish', 0)
-            ->where('status', 'diterima')
-            ->where('penerima.id_role', 2)
+            ->where_in('status', ['diterima', 'pengembalian'])
+            ->where('id_user_confirm', 2)
             ->get('pinjam_barang')
             ->result();
 
@@ -214,6 +284,7 @@ class Kepsek extends CI_Controller
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
             ->where('waktu >=', date('Y-m-d'))
             ->where('status', 'diterima')
+            ->where('id_user_confirm', 1)
             ->get('pinjam_ruangan')
             ->result();
 
@@ -300,7 +371,8 @@ class Kepsek extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['kendaraan'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, 
+            ->select('peminjam.nama AS peminjam, 
+            penerima.id_role as id_penerima, pinjam_kendaraan.is_finish, pinjam_kendaraan.waktu AS waktu_pinjam, 
             kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, 
             supir.nama AS nama_supir, penerima.nama AS penerima, pinjam_kendaraan.status, 
             pinjam_kendaraan.pesan, pengembalian.kilometer_akhir, pengembalian.denda, 
@@ -328,7 +400,8 @@ class Kepsek extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['ruangan'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.status, pinjam_ruangan.pesan')
+            ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_ruangan.is_finish,
+             pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.status, pinjam_ruangan.pesan')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -351,7 +424,7 @@ class Kepsek extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['barang'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_barang.created_at AS waktu_pinjam, 
+            ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_barang.is_finish, pinjam_barang.created_at AS waktu_pinjam, 
             barang.nama AS nama_barang, pinjam_barang.quantity, pinjam_barang.alasan_pinjam, 
             penerima.nama AS penerima, pinjam_barang.status, pinjam_barang.pesan,
             pengembalian.waktu_pengembalian AS waktu_kembali')

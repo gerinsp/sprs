@@ -24,7 +24,7 @@
             <div class="col-12">
                <!-- /.card -->
                <?= $this->session->flashdata('message'); ?>
-               <h2>Barang Harian</h2>
+               <h4>Barang Harian</h4>
                <div class="shadow card" style="margin-bottom: 30px;">
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -37,6 +37,7 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penolak</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
                               </tr>
                            </thead>
@@ -51,6 +52,7 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->waktu_pinjam ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
+                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->pesan ?></td>
                                  </tr>
                               <?php
@@ -62,7 +64,7 @@
                      </div>
                   </div>
                </div>
-               <h2>Barang Pulang</h2>
+               <h4>Barang Pulang</h4>
                <div class="shadow card" style="margin-bottom: 30px;">
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -76,7 +78,8 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Alasan Pinjam</th>
-                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penolak</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
                               </tr>
                            </thead>
                            <tbody>
@@ -91,6 +94,7 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->alasan_pinjam ?></td>
+                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->pesan ?></td>
                                  </tr>
                               <?php
@@ -102,7 +106,7 @@
                      </div>
                   </div>
                </div>
-               <h2>Kendaraan</h2>
+               <h4>Kendaraan</h4>
                <div class="shadow card" style="margin-bottom: 30px;">
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -116,7 +120,8 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Kendaraan</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kilometer Awal</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Supir</th>
-                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penolak</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
                               </tr>
                            </thead>
                            <tbody>
@@ -131,6 +136,7 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_kendaraan ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kilometer_awal ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->nama_supir ?></td>
+                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->pesan ?></td>
                                  </tr>
                               <?php
@@ -142,7 +148,7 @@
                      </div>
                   </div>
                </div>
-               <h2>Ruangan</h2>
+               <h4>Ruangan</h4>
                <div class="shadow card">
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -157,7 +163,8 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Acara</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kebutuhan</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Keterangan</th>
-                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penolak</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Pesan</th>
                               </tr>
                            </thead>
                            <tbody>
@@ -173,6 +180,7 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->acara ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kebutuhan ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->keterangan ?></td>
+                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->pesan ?></td>
                                  </tr>
                               <?php

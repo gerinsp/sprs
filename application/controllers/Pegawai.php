@@ -33,12 +33,14 @@ class Pegawai extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['kendaraan'] = $this->db
-            ->select('pinjam_kendaraan.id_pinjam_kendaraan, user.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan,  pinjam_kendaraan.kilometer_awal, supir.nama as nama_supir')
+            ->select('pinjam_kendaraan.id_pinjam_kendaraan, pinjam_kendaraan.status, penerima.id_role as id_penerima, user.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan,  pinjam_kendaraan.kilometer_awal, supir.nama as nama_supir')
             ->join('user', 'user.id_user = pinjam_kendaraan.id_peminjam', 'left')
+            ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
             ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan', 'left')
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir', 'left')
             ->where('is_finish', 0)
-            ->where('status', 'menunggu')
+            ->where('status', 'diterima')
+            ->where('penerima.id_user', 2)
             ->get('pinjam_kendaraan')
             ->result();
 
@@ -84,24 +86,25 @@ class Pegawai extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['kendaraan'] = $this->db
-            ->select('pinjam_kendaraan.id_pinjam_kendaraan, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima')
+            ->select('pinjam_kendaraan.id_pinjam_kendaraan, pinjam_kendaraan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, supir.nama AS nama_supir, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_kendaraan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_kendaraan.id_user_confirm')
             ->join('kendaraan', 'kendaraan.id_kendaraan = pinjam_kendaraan.id_kendaraan')
             ->join('supir', 'supir.id_supir = pinjam_kendaraan.id_supir')
             ->where('is_finish', 0)
-            ->where('status', 'diterima')
-            ->where('penerima.id_role', 2)
+            ->where_in('status', ['diterima', 'pengembalian'])
+            ->where('penerima.id_user', 3)
             ->get('pinjam_kendaraan')
             ->result();
 
         $data['ruangan'] = $this->db
-            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+            ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
             ->where('waktu >=', date('Y-m-d'))
             ->where('status', 'diterima')
+            ->where('penerima.id_user', 1)
             ->get('pinjam_ruangan')
             ->result();
 
@@ -163,7 +166,7 @@ class Pegawai extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['kendaraan'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_kendaraan.waktu AS waktu_pinjam, 
+            ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_kendaraan.is_finish, pinjam_kendaraan.waktu AS waktu_pinjam, 
             kendaraan.nama AS nama_kendaraan, pinjam_kendaraan.kilometer_awal, 
             supir.nama AS nama_supir, penerima.nama AS penerima, pinjam_kendaraan.status, 
             pinjam_kendaraan.pesan, pengembalian.kilometer_akhir, pengembalian.denda, 
@@ -191,7 +194,10 @@ class Pegawai extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['ruangan'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.status, pinjam_ruangan.pesan')
+            ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_ruangan.is_finish,
+             pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  
+             pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, 
+             pinjam_ruangan.status, pinjam_ruangan.pesan')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -208,35 +214,7 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/script', $data);
     }
 
-    public function pengembalian_kendaraan()
-    {
-        $id_penerima = $this->session->userdata('id_user');
-        $id_pinjam_kendaraan = $this->input->post('id_pinjam_kendaraan');
-        $kilometer_akhir = $this->input->post('kilometer_akhir');
-        $denda = $this->input->post('denda');
-        $keterangan = $this->input->post('keterangan');
-        $waktu_pengembalian = date('Y-m-d H:i:s');
 
-        $this->db->insert('pengembalian_kendaraan', [
-            'id_pinjam_kendaraan' => $id_pinjam_kendaraan,
-            'waktu_pengembalian' => $waktu_pengembalian,
-            'denda' => $denda,
-            'kilometer_akhir' => $kilometer_akhir,
-            'keterangan' => $keterangan,
-            'id_penerima' => $id_penerima
-        ]);
-
-        $this->db->where('id_pinjam_kendaraan', $id_pinjam_kendaraan)->update('pinjam_kendaraan', [
-            'is_finish' => 1
-        ]);
-
-        $response = array(
-            'status' => 'ok',
-            'data' => null
-        );
-
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-    }
     public function profile()
     {
         $data['title'] = 'SPRS | Profile';
@@ -250,7 +228,15 @@ class Pegawai extends CI_Controller
         $this->load->view('templates/script', $data);
     }
 
+    public function konfirmasi_kendaraan($id_pinjam_kendaraan)
+    {
+        $this->db->where('id_pinjam_kendaraan', $id_pinjam_kendaraan)->update('pinjam_kendaraan', [
+            'is_finish' => 1
+        ]);
 
+        $this->session->set_flashdata('success', 'Berhasil melakukan konfirmasi pengembalian');
+        return redirect('/pegawai/peminjaman');
+    }
     public function profile_changepassword()
     {
         // pasword field di peminjam

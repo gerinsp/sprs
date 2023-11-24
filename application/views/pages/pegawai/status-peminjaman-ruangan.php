@@ -38,8 +38,7 @@
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Acara</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kebutuhan</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Keterangan</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Status</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
+                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;" colspan="2" class="text-center">Status</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Alasan</th>
                                         </tr>
                                     </thead>
@@ -56,15 +55,17 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->acara ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kebutuhan ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->keterangan ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="10%">
-                                                    <?php if ($data->status == 'diterima') : ?>
-                                                        <span class="badge badge-primary"><?= $data->status ?></span>
-                                                    <?php endif; ?>
-                                                    <?php if ($data->status == 'ditolak') : ?>
-                                                        <span class="badge badge-danger"><?= $data->status ?></span>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
+                                                <?php if ($data->is_finish == 1) : ?>
+                                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Kepala Sekolah Approve</td>
+                                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">IT Approve</td>
+                                                <?php endif; ?>
+                                                <?php if ($data->status == 'ditolak' && $data->id_penerima == 2) { ?>
+                                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Kepala Sekolah Tolak</td>
+                                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">N/A</td>
+                                                <?php } elseif($data->status == 'ditolak' && $data->id_penerima == 1) { ?>
+                                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Kepala Sekolah Approve</td>
+                                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">IT Tolak</td>
+                                                <?php } ?>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->pesan ?></td>
                                             </tr>
                                         <?php

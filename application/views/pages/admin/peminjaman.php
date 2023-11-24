@@ -37,7 +37,6 @@
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
                                         </tr>
                                     </thead>
@@ -52,9 +51,14 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo date('j M Y H:i:s', strtotime($data->waktu_pinjam)) ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
-                                                    <a href="<?= base_url($this->session->userdata('menu')) ?>/pengembalian-harian/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Pengembalian</a>
+                                                    <?php if($data->status == 'pengembalian') { ?>
+                                                        <a href="<?= base_url($this->session->userdata('menu')) ?>/konfirmasi-harian/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Konfirmasi</a>
+                                                    <?php } elseif($data->status == 'diterima' && $data->id_penerima == 2) { ?>
+                                                        Menunggu pengembalian
+                                                    <?php } else { ?>
+                                                        N/A
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php
@@ -80,7 +84,6 @@
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Alasan Pinjam</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
                                         </tr>
                                     </thead>
@@ -96,9 +99,14 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->alasan_pinjam ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
-                                                    <a href="<?= base_url($this->session->userdata('menu')) ?>/pengembalian/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Pengembalian</a>
+                                                    <?php if($data->status == 'pengembalian') { ?>
+                                                     <a href="<?= base_url($this->session->userdata('menu')) ?>/konfirmasi-pulang/<?= $data->id_pinjam_barang; ?>" class="btn btn-primary">Konfirmasi</a>
+                                                    <?php } elseif($data->status == 'diterima' && $data->id_penerima == 2) { ?>
+                                                      Menunggu pengembalian
+                                                    <?php } else { ?>
+                                                      N/A
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php
@@ -124,7 +132,6 @@
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Kendaraan</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kilometer Awal</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Supir</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -139,7 +146,6 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_kendaraan ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kilometer_awal ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->nama_supir ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                             </tr>
                                         <?php
                                             $no++;
@@ -165,7 +171,6 @@
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Acara</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kebutuhan</th>
                                             <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Keterangan</th>
-                                            <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -181,7 +186,6 @@
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->acara ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kebutuhan ?></td>
                                                 <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->keterangan ?></td>
-                                                <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                             </tr>
                                         <?php
                                             $no++;

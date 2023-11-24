@@ -24,7 +24,7 @@
             <div class="col-12">
                <!-- /.card -->
                <?= $this->session->flashdata('message'); ?>
-               <h2>Peminjaman Harian</h2>
+               <h4>Peminjaman Harian</h4>
                <div class="shadow card">
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -37,7 +37,8 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
-                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
+                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;" colspan="2" class="text-center">Status</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
                               </tr>
                            </thead>
                            <tbody>
@@ -51,7 +52,11 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->waktu_pinjam ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
-                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
+                                     <?php if($data->id_penerima == 2) : ?>
+                                      <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">IT Approve</td>
+                                      <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Kepala Sekolah Approve</td>
+                                     <?php endif; ?>
+                                      <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Sudah Dikembalikan</td>
                                  </tr>
                               <?php
                                  $no++;
@@ -62,7 +67,7 @@
                      </div>
                   </div>
                </div>
-               <h2>Peminjaman Bawa Pulang</h2>
+               <h4>Peminjaman Bawa Pulang</h4>
                <div class="shadow card">
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -75,7 +80,8 @@
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Waktu Pinjam</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Barang</th>
                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Quantity</th>
-                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
+                                 <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;" colspan="2" class="text-center">Status</th>
+                                  <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
                               </tr>
                            </thead>
                            <tbody>
@@ -89,7 +95,11 @@
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->waktu_pinjam ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_barang ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->quantity ?></td>
-                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
+                                     <?php if($data->id_penerima == 2) : ?>
+                                         <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">IT Approve</td>
+                                         <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Kepala Sekolah Approve</td>
+                                     <?php endif; ?>
+                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">Sudah Dikembalikan</td>
                                  </tr>
                               <?php
                                  $no++;

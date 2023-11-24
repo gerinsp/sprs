@@ -38,7 +38,6 @@
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Kendaraan</th>
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kilometer Awal</th>
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Supir</th>
-                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Aksi</th>
                                     </tr>
                                     </thead>
@@ -54,9 +53,12 @@
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_kendaraan ?></td>
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kilometer_awal ?></td>
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->nama_supir ?></td>
-                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%">
-                                                <a id="btn-kendaraan" id-kendaraan="<?= $data->id_pinjam_kendaraan ?>" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" href="#">Pengembalian</a>
+                                                <?php if($data->status == 'pengembalian') { ?>
+                                                    <a href="<?= base_url($this->session->userdata('menu')) ?>/konfirmasi-kendaraan/<?= $data->id_pinjam_kendaraan; ?>" class="btn btn-primary">Konfirmasi</a>
+                                                <?php } else { ?>
+                                                    Menunggu pengembalian
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                         <?php
@@ -83,7 +85,6 @@
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Nama Acara</th>
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Kebutuhan</th>
                                         <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Keterangan</th>
-                                        <th style=" padding: 0.75rem;vertical-align: top;border-top: 1px solid #e3e6f0;">Penerima</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -99,7 +100,6 @@
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->acara ?></td>
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kebutuhan ?></td>
                                             <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->keterangan ?></td>
-                                            <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->penerima ?></td>
                                         </tr>
                                         <?php
                                         $no++;
