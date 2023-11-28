@@ -282,7 +282,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['ruangan'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+            ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -304,14 +304,17 @@ class Admin extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['barang_harian'] = $this->db
-            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.status, penerima.id_role as id_penerima, pinjam_barang.created_at AS waktu_pinjam, pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, barang.nama AS nama_barang')
+            ->select('pinjam_barang.id_pinjam_barang, pinjam_barang.status, 
+            penerima.id_role as id_penerima, 
+            pinjam_barang.created_at AS waktu_pinjam, 
+            pinjam_barang.quantity, peminjam.nama AS peminjam, penerima.nama AS penerima, 
+            barang.nama AS nama_barang')
             ->join('user peminjam', 'peminjam.id_user = pinjam_barang.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_barang.id_user_confirm')
             ->join('barang', 'barang.id_barang = pinjam_barang.id_barang')
             ->where('is_takeaway', 0)
             ->where('is_finish', 0)
             ->where_in('status', ['diterima', 'pengembalian'])
-            ->where('id_user_confirm', 2)
             ->get('pinjam_barang')
             ->result();
 
@@ -340,7 +343,9 @@ class Admin extends CI_Controller
             ->result();
 
         $data['ruangan'] = $this->db
-            ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+            ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.status, penerima.id_role as id_penerima, 
+            peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  
+            pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -383,7 +388,8 @@ class Admin extends CI_Controller
             ->result();
 
         $data['ruangan'] = $this->db
-            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan')
+            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, 
+            pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -409,9 +415,14 @@ class Admin extends CI_Controller
         }
         $barang = $this->db->get_where('barang', ['id_barang' => $data_pinjam_barang->id_barang])->row();
         $stok = (int)$barang->stok - (int)$data_pinjam_barang->quantity;
-        $this->db->update('barang', ['stok' => $stok], ['id_barang' => $data_pinjam_barang->id_barang]);
+        $this->db->update('barang', [
+            'stok' => $stok
+        ], ['id_barang' => $data_pinjam_barang->id_barang]);
 
-        $this->db->update('pinjam_barang', ['status' => 'diterima', 'id_user_confirm' => $this->session->userdata('id_user')], ['id_pinjam_barang' => $id_pinjam_barang]);
+        $this->db->update('pinjam_barang', [
+            'status' => 'diterima',
+            'id_user_confirm' => $this->session->userdata('id_user')
+        ], ['id_pinjam_barang' => $id_pinjam_barang]);
         $this->session->set_flashdata('success', 'Data berhasil dikonfirmasi');
         return redirect('/admin/permintaan');
     }
@@ -778,7 +789,7 @@ class Admin extends CI_Controller
             ->result();
 
         $data['ruangan'] = $this->db
-            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.pesan')
+            ->select('pinjam_ruangan.id_pinjam_ruangan, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, pinjam_ruangan.pesan')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')

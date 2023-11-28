@@ -101,6 +101,14 @@
                               </div>
                            </div>
                         </div>
+                         <div class="row">
+                             <div class="col-md-12">
+                                 <div class="form-group">
+                                     <label for="exampleFormControlTextarea1">Tanggal Acara</label>
+                                     <input class="form-control" type="date" id="tgl_acara" name="tgl_acara">
+                                 </div>
+                             </div>
+                         </div>
                      </div>
                      <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -135,8 +143,9 @@
             namaacara: $('#namaacara').val(),
             kebutuhan: $('#kebutuhan').val(),
             keterangan: $('#keterangan').val(),
+             tglacara: $('#tgl_acara').val(),
          };
-         if ($('#kebutuhan').val() == "" || $('#keterangan').val() == "" || $('#namaacara').val() == "") {
+         if ($('#tgl_acara').val() == "" || $('#kebutuhan').val() == "" || $('#keterangan').val() == "" || $('#namaacara').val() == "") {
             Swal.fire({
                icon: 'warning',
                title: '',

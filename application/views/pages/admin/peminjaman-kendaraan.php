@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a class="text-info" href="<?= base_url($this->session->userdata('menu')) ?>">Home</a></li>
-                        <li class="breadcrumb-item active">peminjaman-kendaraan</li>
+                        <li class="breadcrumb-item active">Peminjaman Kendaraan</li>
                     </ol>
                 </div>
             </div>

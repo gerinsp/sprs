@@ -98,7 +98,7 @@ class Pegawai extends CI_Controller
             ->result();
 
         $data['ruangan'] = $this->db
-            ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+            ->select('pinjam_ruangan.id_pinjam_ruangan, pinjam_ruangan.status, penerima.id_role as id_penerima, peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -144,7 +144,7 @@ class Pegawai extends CI_Controller
         $data['user'] = $this->m->Get_Where(['id_user' => $this->session->userdata('id_user')], 'user');
 
         $data['ruangan'] = $this->db
-            ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
+            ->select('peminjam.nama AS peminjam, pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')
             ->join('user penerima', 'penerima.id_user = pinjam_ruangan.id_user_confirm')
             ->join('ruangan', 'ruangan.id_ruangan = pinjam_ruangan.id_ruangan')
@@ -195,7 +195,7 @@ class Pegawai extends CI_Controller
 
         $data['ruangan'] = $this->db
             ->select('peminjam.nama AS peminjam, penerima.id_role as id_penerima, pinjam_ruangan.is_finish,
-             pinjam_ruangan.waktu AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  
+             pinjam_ruangan.waktu AS waktu_acara, pinjam_ruangan.created_at AS waktu_pinjam, ruangan.nama AS nama_ruangan,  pinjam_ruangan.acara,  
              pinjam_ruangan.kebutuhan,  pinjam_ruangan.keterangan, penerima.nama AS penerima, 
              pinjam_ruangan.status, pinjam_ruangan.pesan')
             ->join('user peminjam', 'peminjam.id_user = pinjam_ruangan.id_peminjam')

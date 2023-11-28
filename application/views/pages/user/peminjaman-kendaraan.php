@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a class="text-info" href="<?= base_url($this->session->userdata('menu')) ?>">Home</a></li>
-                  <li class="breadcrumb-item active">peminjaman-kendaraan</li>
+                  <li class="breadcrumb-item active">Peminjaman Kendaraan</li>
                </ol>
             </div>
          </div>
@@ -49,7 +49,7 @@
                                  <tr>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="3%"><?php echo $no ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->peminjam ?></td>
-                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->waktu_pinjam ?></td>
+                                    <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo date('j M Y H:i:s', strtotime($data->waktu_pinjam)) ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->nama_kendaraan ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="12%"><?php echo $data->kilometer_awal ?></td>
                                     <td style="vertical-align: top;border-top: 1px solid #e3e6f0;" width="20%"><?php echo $data->nama_supir ?></td>
